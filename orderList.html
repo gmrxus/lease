@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/jquery-1.11.1.min.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/time.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			html,
+			body,
+			.mui-content {
+				font-size: 92%;
+				color: #777;
+				height: 0px;
+				margin: 0px;
+				background-color: #efeff4;
+			}
+			
+			* {
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+			}
+			
+			#orderlist-main {
+				visibility: hidden;
+			}
+			
+			.order {
+				border: 1px solid #8F8F94;
+				overflow: hidden;
+				zoom: 1;
+			}
+			
+			.order div {
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			
+			.order1 {
+				line-height: 40px;
+				height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			.order1 span + span {
+				float: right;
+			}
+			
+			.order2 {
+				line-height: 40px;
+				height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			.vehicleAttr {
+				float: left;
+			}
+			
+			.vehicleType {
+				float: right;
+			}
+			
+			.order3 {
+				border-bottom: 1px solid #8F8F94;
+				overflow: hidden;
+			}
+			
+			.order3 div {
+				float: left;
+			}
+			
+			.takeTime {
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+			
+			.returnTime {
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+			
+			.days {
+				margin-top: 30px;
+			}
+			
+			.order4,
+			.order5 {
+				margin-bottom: 10px;
+			}
+			
+			.order4 {
+				height: 40px;
+				line-height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			@keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-webkit-keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-moz-keyframes rotate {
+				from {
+					-moz-transform: rotate(0deg)
+				}
+				to {
+					-moz-transform: rotate(360deg)
+				}
+			}
+			
+			@-ms-keyframes rotate {
+				from {
+					-ms-transform: rotate(0deg)
+				}
+				to {
+					-ms-transform: rotate(360deg)
+				}
+			}
+			
+			@-o-keyframes rotate {
+				from {
+					-o-transform: rotate(0deg)
+				}
+				to {
+					-o-transform: rotate(360deg)
+				}
+			}
+			
+			img {
+				animation: 9.5s linear 0s normal none infinite rotate;
+				-webkit-animation: 0.8s linear 0s normal none infinite rotate;
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+			}
+			/*跨webview需要手动指定位置*/
+			/*.mui-plus header.mui-bar {
+				display: none!important;
+			}
+			*/
+			/*.mui-plus .mui-bar-nav~.mui-content {
+				padding: 0!important;
+			}*/
+			
+			.mui-plus .plus {
+				display: inline;
+			}
+			
+			.plus {
+				display: none;
+			}
+			/*#topPopover {
+				position: fixed;
+				top: 16px;
+				right: 6px;
+			}*/
+			/*#topPopover .mui-popover-arrow {
+				left: auto;
+				right: 6px;
+			}*/
+			
+			p {
+				text-indent: 22px;
+			}
+			
+			span.mui-icon {
+				font-size: 14px;
+				color: #007aff;
+				margin-left: -15px;
+				padding-right: 10px;
+			}
+			/*.mui-popover {
+				height: 300px;
+			}*/
+			
+			.mui-content {
+				padding: 10px;
+			}
+			
+			#menu {
+				color: white;
+			}
+		</style>
+		<script>
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="wode.html"></a>
+			<a id="menu" class="mui-action-menu mui-icon mui-icon-bars mui-pull-right" href="#topPopover"></a>
+			<h1 id="title" class="mui-title">预定中</h1>
+		</header>
+
+		<div class="mui-content">
+
+			<div class="mui-content-padded">
+
+				<div align="center" id="loading">
+					<img src="images/loading_throbber.png" />
+				</div>
+
+				<div id="orderlist-main">
+
+				</div>
+
+			</div>
+		</div>
+
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover">
+
+			<ul class="mui-table-view">
+				<li id="item1" class="mui-table-view-cell"><a href="#">全部订单</a>
+				</li>
+				<li id="item2" class="mui-table-view-cell"><a href="#">预定中</a>
+				</li>
+				<li id="item3" class="mui-table-view-cell"><a href="#">退订</a>
+				</li>
+				<!--<li id="item4" class="mui-table-view-cell"><a href="#">未取车</a>
+						</li>-->
+				<li id="item5" class="mui-table-view-cell"><a href="#">已取车</a>
+				</li>
+				<!--<li id="item6" class="mui-table-view-cell"><a href="#">未还车</a>
+						</li>-->
+				<li id="item7" class="mui-table-view-cell"><a href="#">已完成</a>
+				</li>
+
+			</ul>
+		</div>
+
+	</body>
+	<script type="text/javascript">
+		mui('.mui-popover').popover('hide');
+		mui('.mui-popover').popover('hide', document.getElementById("menu"));
+
+		//		var st = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30 * 12 * 5);
+		//		var et = new Date();
+		//		var stime = st.getFullYear() + "/" + st.getMonth() + "/" + st.getDate() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds();
+		//		var etime = et.getFullYear() + 5 + "/" + (et.getMonth() + 1) + "/" + et.getDate() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds();
+		var stime = afterNowDay(-365 * 5, "day");
+		var etime = afterNowDay(365 * 5, "day");
+
+		var orderArray = new Array();
+		var loading = document.getElementById('loading');
+		var main = document.getElementById('orderlist-main');
+		var title = document.getElementById('title');
+		var list = new Array();
+		window.onload = function() {
+			getOrderList(localStorage.getItem('username'), stime, etime);
+		}
+
+		function getOrderList(username, takeTime, returnTime) {
+			var myUrl = HEAD + BODY + ORDER_LIST;
+			var myData = {
+				argLoginName: username,
+				argTakeTime: takeTime,
+				argReturnTime: returnTime
+			};
+			netRequest(myUrl, myData);
+		}
+
+		function getdata(data) {
+			if (data.Result == 1) {
+				orderArray = data.Table;
+
+				clickItem1();
+			} else {
+				main.innerHTML = "您还没有生成订单"
+				loading.style.height = "0px";
+				loading.style.visibility = "hidden";
+				main.style.visibility = "visible";
+			}
+		}
+		var orderlist;
+
+		function setHtml(list, doc) {
+			if (list.length > 0) {
+				var html = "";
+				orderlist = list;
+				for (var i = 0; i < list.length; i++) {
+					//					var realTakeTime = data.RealTakeTime ? data.RealTakeTime : data.ExpectTakeTime;
+					//					var realReturnTime = data.RealReturnTime ? data.RealReturnTime : (data.RenewReturnTime ? data.RenewReturnTime : data.ExpectReturnTime);
+					var takeTime = list[i].RealTakeTime ? list[i].RealTakeTime : list[i].ExpectTakeTime;
+					var returnTime = list[i].RealReturnTime ? list[i].RealReturnTime : (list[i].RenewReturnTime ? list[i].RenewReturnTime : list[i].ExpectReturnTime);
+					var returnNetWord = list[i].RealReturnCarNetworkName ? list[i].RealReturnCarNetworkName : list[i].ExpectReturnCarNetworkName;
+					var a = list[i].OrderID;
+					html += '<div id=' + a + ' class="order" onclick="orderStore(this)"><div class="order1">订单号:<span class="orderID">' + list[i].OrderID + '</span><span class="orderStatus">' + setStatus(parseInt(list[i].Status), list[i].IsSettlement) + '</span></div><div class="order2"><span class="vehicleAttr">车牌: ' + list[i].VehicleNo + '</span><span class="vehicleType">车型: ' + list[i].vehicleTypeName + '</span></div><div class="order3"><div class="takeTime">取车时间: ' + takeTime + '</div><div class="days">时长: ' + setDate(takeTime, returnTime) + '</div><div class="returnTime">还车时间: ' + returnTime + '</div></div><div class="order4"><span class="takeStore">取车门店: ' + list[i].TakeCarNetworkName + '</span></div><div class="order5"><span class="returnStore">还车门店: ' + returnNetWord + '</span></div></div><br/>';
+				}
+				loading.style.height = "0px";
+				loading.style.visibility = "hidden";
+				main.innerHTML = html;
+				main.style.visibility = "visible";
+			} else {
+				loading.style.height = "0px";
+				loading.style.visibility = "hidden";
+				main.innerHTML = doc;
+				main.style.visibility = "visible";
+			}
+
+		}
+
+		function setStatus(e, f) {
+
+			switch (e) {
+				case 1:
+					return "预定中";
+				case 2:
+					return "已取车";
+				case 3:
+					return "已还车";
+				case 4:
+					if (1 == f || 0 == f) {
+						return "已挂起"
+					} else {
+						return "已退订"
+					}
+
+				case 5:
+					return "未通过审核";
+				case 6:
+					return "预定中"; //通过审核
+				case 7:
+					return "变更车辆";
+				case 10:
+					return "超时还车";
+				case 11:
+					return "正常未还车";
+				case 12:
+					return "超时未还车";
+				case 13:
+					return "正常未取车";
+				case 14:
+					return "超时未取车";
+				case 15:
+					return "续订";
+				case 16:
+					return "取消订单";
+				default:
+					return "状态未知";
+			}
+		}
+
+		function setDate(stime, etime) {
+			var mdate = (new Date(etime) - new Date(stime)) / 1000;
+			var day = parseInt(mdate / 3600 / 24);
+			var hour = parseInt((mdate - day * 24 * 3600) / 3600);
+			var minute = parseInt((mdate - day * 24 * 3600 - hour * 3600) / 60);
+			return day + "天" + hour + "时" + minute + "分";
+		}
+
+		function orderStore(e) {
+			for (var i = 0; i < orderlist.length; i++) {
+				if (e.id == orderlist[i].OrderID) {
+					localStorage.setItem('order', JSON.stringify(orderlist[i]));
+					localStorage.setItem('orderId', orderlist[i].OrderID);
+				}
+			}
+			//			localStorage.setItem('order', JSON.stringify(orderArray[i]));
+			//			localStorage.setItem('orderId', JSON.stringify(orderArray[i].OrderID));
+			//			localStorage.setItem('order', JSON.stringify(i));
+			//			localStorage.setItem('orderId', JSON.stringify(i.OrderID));
+			window.location.href = "orderDetail.html";
+		}
+
+		//分界线
+		//			mui.init({
+		//				swipeBack: true //启用右滑关闭功能
+		//			});
+		//			mui('.mui-scroll-wrapper').scroll();
+		//			mui('body').on('shown', '.mui-popover', function(e) {
+
+		//			});
+		//			mui('body').on('hidden', '.mui-popover', function(e) {
+
+		//			});
+
+		function clickItem1() {
+			//				title.innerHTML = "全部订单";
+			//				setHtml(orderArray, "您还没有生成订单");
+			title.innerHTML = "预定中";
+
+			var list1 = listAddOrder("1");
+			var list6 = listAddOrder('6');
+			var list = list1.concat(list6);
+
+			setHtml(list, "您还没有预定中的订单");
+		}
+		document.getElementById('item1').onclick = function() {
+			mui('.mui-popover').popover('toggle', document.getElementById("menu"));
+			title.innerHTML = "全部订单";
+			setHtml(orderArray, "您还没有生成订单");
+
+		}
+
+		document.getElementById('item2').onclick = function() {
+			mui('.mui-popover').popover('toggle', document.getElementById("menu"));
+			title.innerHTML = "预定中";
+
+			var list1 = listAddOrder("1");
+			var list6 = listAddOrder('6');
+			var list = list1.concat(list6);
+
+			setHtml(list, "您还没有预定中的订单");
+		}
+		document.getElementById('item3').onclick = function() {
+				mui('.mui-popover').popover('toggle', document.getElementById("menu"));
+				title.innerHTML = "退订";
+				var list13 = listAddOrder('13');
+				var list4 = listAddOrder('4');
+				var list7 = listAddOrder('7');
+				var list = list13.concat(list4, list7);
+				setHtml(list, "您还没有已取消的订单");
+			}
+			//			document.getElementById('item4').onclick = function() {
+			//				mui('.mui-popover').popover('toggle',document.getElementById("menu"));
+			//				title.innerHTML = "未取车";
+			//				var list5 = listAddOrder('5');
+			//				var list6 = listAddOrder('6');
+			//				var list13 = listAddOrder('13');
+			//				var list14 = listAddOrder('14');
+			//				var list = list5.concat(list5, list6, list13, list14);
+			//
+			//				setHtml(list, "您还没有未取车的订单");
+			//
+			//			}å
+		document.getElementById('item5').onclick = function() {
+				mui('.mui-popover').popover('toggle', document.getElementById("menu"));
+				title.innerHTML = "已取车";
+				var list2 = listAddOrder('2');
+				setHtml(list2, "您还没有已取车订单");
+			}
+			//			document.getElementById('item6').onclick = function() {
+			//				mui('.mui-popover').popover('toggle',document.getElementById("menu"));
+			//				title.innerHTML = "未还车";
+			//				var list11 = listAddOrder('11');
+			//				var list12 = listAddOrder('12');
+			//				var list15 = listAddOrder('15');
+			//				var list = list11.concat(list12, list15);
+			//				setHtml(list, "您还没有未还车的订单");
+			//			}
+		document.getElementById('item7').onclick = function() {
+			mui('.mui-popover').popover('toggle', document.getElementById("menu"));
+			title.innerHTML = "已完成";
+			var list10 = listAddOrder('10');
+			var list3 = listAddOrder('3');
+			var list = list10.concat(list3);
+			setHtml(list, "您还没有已完成订单");
+		}
+
+		function listAddOrder(status) {
+
+			var list = new Array();
+			for (var i = 0; i < orderArray.length; i++) {
+				if (orderArray[i].Status == status) {
+					list.push(orderArray[i]);
+				}
+			}
+
+			return list;
+		}
+	</script>
+
+</html>

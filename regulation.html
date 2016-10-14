@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/time.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			@keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-webkit-keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-moz-keyframes rotate {
+				from {
+					-moz-transform: rotate(0deg)
+				}
+				to {
+					-moz-transform: rotate(360deg)
+				}
+			}
+			
+			@-ms-keyframes rotate {
+				from {
+					-ms-transform: rotate(0deg)
+				}
+				to {
+					-ms-transform: rotate(360deg)
+				}
+			}
+			
+			@-o-keyframes rotate {
+				from {
+					-o-transform: rotate(0deg)
+				}
+				to {
+					-o-transform: rotate(360deg)
+				}
+			}
+			
+			img {
+				margin-top: 20px;
+				animation: 9.5s linear 0s normal none infinite rotate;
+				-webkit-animation: 0.8s linear 0s normal none infinite rotate;
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+			}
+			
+			body {
+				font-size: 90%;
+				color: #777;
+				height: 0px;
+				padding: 0px;
+				background-color: #efeff4;
+			}
+			
+			#cont {
+				margin-top: 10px;
+				margin: 10px;
+				display: none;
+			}
+			
+			#cont div {
+				padding-left: 10px;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				border: 1px #aaa solid;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">违章信息</h1>
+		</header>
+		<div class="mui-content">
+			<div align="center" id="loading">
+				<img src="images/loading_throbber.png" />
+			</div>
+			<div id="cont">
+				<!--<div>
+					订单号 : '+data[i].OrderID+'
+				</div>
+				<div>
+					车牌 : '+data[i].VehicleNo+'
+				</div>
+				<div>
+					驾驶人 : '+data[i].Driver+'
+				</div>
+				<div>
+					违章行为 : '+data[i].Behavior+'
+				</div>
+				<div>
+					违章时间 : '+data[i].Time+'
+
+				</div>
+				<div>
+					违章地点 : '+data[i].Place+'
+				</div>
+				<div>
+					事故处理状态 : '+data[i].Status+'
+				</div>
+				<div>
+					扣分 : '+data[i].Points+'
+				</div>
+				<div>
+					罚款 : '+data[i].Amount+'
+				</div>
+				<div>
+					违章代办费 : '+data[i].CommissionCost+'
+				</div>
+				<div>
+					是否已经结算 : '+data[i].IsSettlement+'
+				</div>
+			</div><br />-->
+			</div>
+			<script type="text/javascript">
+				var loginName = JSON.parse(localStorage.getItem('info')).LoginName;
+				var cont = document.getElementById('cont');
+				var loading = document.getElementById('loading');
+				window.onload = function() {
+//					var st = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30 * 12 * 5);
+//					var et = new Date();
+//					var stime = st.getFullYear() + "/" + st.getMonth() + "/" + st.getDate() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds();
+//					var etime = et.getFullYear() + 5 + "/" + (et.getMonth() + 1) + "/" + et.getDate() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds();
+					var stime = afterNowDay(-365*5,"day");
+			var etime = afterNowDay(365*5,"day"); 
+					getRegulation(loginName,stime,etime);
+				}
+
+				function getRegulation(loginName, sTime, eTime) {
+					var myUrl = HEAD + BODY_REGULATION;
+					var myData = {
+						loginName: loginName,
+						organizationId: "",
+						networkName: "",
+						vehicle: "",
+						place: "",
+						btime: sTime,
+						etime: eTime
+					}
+
+					netRequest(myUrl, myData);
+				}
+				var html = "";
+
+				function getdata(data) {
+					if (data.length == 0) {
+						html = '您还没有违章信息';
+					} else {
+						setHtml(data);
+					}
+					loading.style.display = 'none';
+					cont.style.display = 'block';
+					cont.innerHTML = html;
+				}
+
+				function setHtml(data) {
+
+					for (var i = 0; i < data.length; i++) {
+						html += '<div>订单号 : ' + data[i].OrderID + '</div><div>车牌 : ' + data[i].VehicleNo + '</div><div>驾驶人 : ' + data[i].Driver + '</div><div>违章行为 : ' + data[i].Behavior + '</div><div>违章时间 : ' + data[i].Time + '</div><div>违章地点 : ' + data[i].Place + '</div><div>事故处理状态 : ' + data[i].Status + '</div><div>扣分 :' + data[i].Points + '</div><div>罚款 : ' + data[i].Amount + '</div><div>违章代办费 : ' + data[i].CommissionCost + '</div><div>是否已经结算 : ' + data[i].IsSettlement + '</div></div><br />';
+					}
+
+				}
+			</script>
+	</body>
+
+</html>

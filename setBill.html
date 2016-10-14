@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+
+			
+			img {
+				opacity: 0.1
+			}
+			
+			#taitou,
+			#dizhi {
+				margin-bottom: 10px;
+				color: white;
+				font-size: 15px;
+				padding: 12px;
+				background-color: #987;
+				text-align: center;
+				width: 50%;
+				float: left;
+			}
+			
+			#taitou {
+				border-bottom: 1px #aaa solid;
+			}
+			
+			#dizhi {
+				border-left: 1px #aaa solid;
+			}
+			
+			#isNull {
+				text-align: center;
+				font-weight: 200;
+				font-size: smaller;
+			}
+			
+			#floor {
+				text-align: center;
+				position: fixed;
+				bottom: 0px;
+				background-color: #987;
+				padding: 12px;
+				width: 100%;
+				font-size: smaller;
+				color: white;
+			}
+			
+			#taitou_main,
+			#dizhi_main,
+			#isNull {
+				display: none;
+			}
+			
+			#cont_left,
+			#con_right {
+				float: left;
+				border-bottom: #AAAAAA solid 1px;
+				border-top: #AAAAAA solid 1px;
+				padding: 10px;
+			}
+			
+			#cont_left {
+				width: 80%;
+			}
+			
+			#con_right {
+				text-align: center;
+				border-left: #AAAAAA solid 1px;
+				width: 20%;
+			}
+			
+			#dizhi_main {
+				width: 100%;
+				padding: 10px;
+			}
+			
+			.info_dizhi {
+				float: left;
+				width: 80%;
+			}
+			
+			.name {
+				border-top: #AAAAAA solid 1px;
+			}
+			
+			.info_dizhi div {
+				padding-left: 10px;
+				height: 30px;
+				line-height: 30px;
+				border-left: #AAAAAA solid 1px;
+				;
+				border-bottom: #AAAAAA solid 1px;
+			}
+			
+			.del_dizhi {
+				float: right;
+				width: 20%;
+				text-align: center;
+				border-left: #AAAAAA solid 1px;
+			}
+			
+			.del_dizhi div {
+				border: #AAAAAA solid 1px;
+				height: 120px;
+				line-height: 120px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">我的发票</h1>
+		</header>
+		<div class="mui-content">
+			<div id="head">
+				<div id="taitou" onclick="clickTaitou()">
+					发票抬头
+				</div>
+				<div id="dizhi" onclick="clickDizhi()">
+					配送地址
+				</div>
+
+			</div>
+
+			<div id="taitou_main">
+				<div id="cont">
+					<div id="cont_left">
+						二月初二龙抬头
+					</div>
+					<div id="con_right">
+						删除
+					</div>
+				</div>
+
+			</div>
+			<div id="dizhi_main">
+				<div id="info_dizhi">
+					<div id="name">
+						二月初二龙抬头
+					</div>
+					<div id="telephone">
+						149494994
+					</div>
+					<div id="address">
+						安徽省
+					</div>
+					<div id="postCode">
+						223322
+					</div>
+				</div>
+				<div id="del_dizhi">
+					<div>
+
+						删除
+					</div>
+				</div>
+			</div>
+			<div id="isNull">
+
+				<img src="images/pig.png" /><br /><span id="iprompt">
+						您还没有常用发票抬头,快添加吧!
+					</span>
+			</div>
+			<div id="floor">
+				新增常用发票抬头
+			</div>
+		</div>
+		<script type="text/javascript">
+//			var LoginName = JSON.parse(localStorage.getItem('info')).LoginName;
+				
+			var taitou = document.getElementById('taitou');
+			var dizhi = document.getElementById('dizhi');
+			var floor = document.getElementById('floor');
+			var iprompt = document.getElementById('iprompt');
+			var taitou_main = document.getElementById('taitou_main');
+			var isNull = document.getElementById('isNull');
+			var cont = document.getElementById('cont');
+			var cont_left = document.getElementById('cont_left');
+			var del = document.getElementById('con_right');
+			var myName = document.getElementById('name');
+			var myTelephone = document.getElementById('telephone');
+			var myAddress = document.getElementById('address');
+			var myPostCode = document.getElementById('postCode');
+			var del_dizhi = document.getElementById('del_dizhi');
+
+			var main_dizhi = document.getElementById('dizhi_main');
+
+			var taitouText1 = "新增常用发票抬头";
+			var taitouText2 = "您还没有常用发票抬头,快添加吧!";
+			var dizhiText1 = "新增常用配送地址";
+			var dizhiText2 = "新增常用配送地址,快添加吧!";
+			var flag = "";
+			window.onload = function() {
+				if (!flag) {
+					clickTaitou();
+				} else {
+					clickDizhi();
+				}
+
+				floor.onclick = function() {
+					if (!flag) {
+						window.location.href = "addTaitou.html";
+					} else {
+						window.location.href = "addDizhi.html";
+					}
+				}
+//				getBillTaitou(LoginName);
+			}
+
+			function clickTaitou() {
+				flag = "";
+				main_dizhi.style.display = "none";
+				var taitou1 = localStorage.getItem('taitou1');
+
+				setView(taitou, dizhi, taitouText1, taitouText2);
+				if (!taitou1) {
+					isNull.style.display = "block";
+				} else {
+					cont_left.innerHTML = taitou1;
+					isNull.style.display = "none";
+					taitou_main.style.display = "block";
+				}
+			}
+
+			function clickDizhi() {
+				flag = "1";
+				taitou_main.style.display = 'none';
+				var name = localStorage.getItem('name');
+				var telephone = localStorage.getItem('telephone');
+				var address = localStorage.getItem('address');
+				var postCode = localStorage.getItem('postCode');
+				setView(dizhi, taitou, dizhiText1, dizhiText2);
+				if (!name) {
+
+					main_dizhi.style.display = "none";
+					isNull.style.display = "block";
+				} else {
+					myName.innerHTML = name;
+					myTelephone.innerHTML = telephone;
+					myAddress.innerHTML = address;
+					myPostCode.innerHTML = postCode;
+
+					isNull.style.display = "none";
+					main_dizhi.style.display = "block";
+				}
+
+			}
+
+			del.onclick = function() {
+				localStorage.setItem('taitou1', "");
+				history.go(0);
+			}
+			del_dizhi.onclick = function() {
+				localStorage.removeItem('name');
+				localStorage.removeItem('telephone');
+				localStorage.removeItem('address');
+				localStorage.removeItem('posttCode');
+				history.go(0);
+				clickDizhi();
+			}
+
+			function setView(view1, view2, text1, text2) {
+				floor.innerHTML = text1;
+				iprompt.innerHTML = text2;
+				view1.style.color = "#FFCC33";
+				view1.style.borderBottom = " 2px #FFCC33 solid";
+				view2.style.color = "white";
+				view2.style.borderBottom = "2px white solid";
+			}
+
+			function getBillTaitou(username) {
+				var myUrl = HEAD + BODY_BILL + GET_BILL_TITLE;
+
+				var myData = {
+					loginName: username //登录名
+				};
+				
+				netRequest(myUrl, myData);
+			}
+ 
+			function getdata(data) {
+				if (data.charAt(0) == 0) {
+					return;
+				}
+				if (data.charAt(0) == 1) {
+					var str = data.substring(2);
+					var array = JSON.parse(str).Title;
+
+				}
+			}
+		</script>
+	</body>
+
+</html>

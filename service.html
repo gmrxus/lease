@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="format-detection" content="telephone=no">
+		<meta http-equiv="x-rim-auto-match" content="none">
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			#main {
+				margin: 10px;
+			}
+			
+			#telephone {
+				color: #007AFF;
+				padding: 20px;
+				font-size: xx-large;
+			}
+			
+			#main {
+				margin-top: 20%;
+				text-align: center;
+			}
+			
+			img {
+				opacity: 0.1;
+				margin-bottom: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">客服</h1>
+		</header>
+		<div class="mui-content">
+			<div id="main">
+				<div id="img">
+					<img src="images/help.png" />
+				</div>
+
+				请拨打我们的<span id="doc">客服电话</span> :
+				<div id="telephone">
+					<a id="tel" href="tel:027-81234567">027-81234567</a>
+				</div>
+			</div>
+			
+			<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+			<script type="text/javascript">
+				var tel="027-81234567";
+				var doc="客服电话";
+				getTel();
+
+				function getTel() {
+					var myUrl=HEAD+BODY_TEL+GET_TEL;
+					var myData={
+						argParamName:"ServicePhoneNumber"
+					}
+					netRequest(myUrl,myData);
+				}
+				function getdata(data){
+					if(data.Result!=1){
+						return;
+					}
+					if(data.Result==1){
+						tel=data.Table[0].ParamValue;
+						doc=data.Table[0].ParamDesc;
+						
+					}
+				}
+				document.getElementById("tel").href="tel:"+tel;
+				document.getElementById("tel").innerHTML=tel;
+				document.getElementById("doc").innerHTML=doc;
+			</script>
+			
+	</body>
+
+</html>

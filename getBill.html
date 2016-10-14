@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			body {
+				color: white;
+			}
+			
+			@keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-webkit-keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-moz-keyframes rotate {
+				from {
+					-moz-transform: rotate(0deg)
+				}
+				to {
+					-moz-transform: rotate(360deg)
+				}
+			}
+			
+			@-ms-keyframes rotate {
+				from {
+					-ms-transform: rotate(0deg)
+				}
+				to {
+					-ms-transform: rotate(360deg)
+				}
+			}
+			
+			@-o-keyframes rotate {
+				from {
+					-o-transform: rotate(0deg)
+				}
+				to {
+					-o-transform: rotate(360deg)
+				}
+			}
+			
+			#loadingImg {
+				animation: 9.5s linear 0s normal none infinite rotate;
+				-webkit-animation: 0.8s linear 0s normal none infinite rotate;
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+			}
+			
+			#loading {
+				margin-top: 100px;
+			}
+			
+			#head {
+				height: 200px;
+				background-color: dodgerblue;
+			}
+			
+			#text {
+				padding: 10px;
+				color: white;
+				
+			}
+			
+			#value {
+				padding-top: 70px;
+				padding-left: 20px;
+				font-size: 80px;
+				color: white;
+			}
+			
+			#chongzhi,
+			#tixian {
+				padding-left: 30px;
+				line-height: 50px;
+				height: 50px;
+				background-color: white;
+				border-bottom: 1px solid #C7C7CC;
+			}
+			
+			.right {
+				height: 10px;
+				margin-top: 20px;
+				padding-right: 15px;
+				float: right;
+			}
+			
+			button {
+				width: 100%;
+			}
+			
+			#main {
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">索取发票</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-content-padded">
+
+				<div align="center" id="loading">
+					<img id="loadingImg" src="images/loading_throbber.png" />
+				</div>
+
+				<div id="main">
+					<div id="head">
+						<div id="text">
+							可开发票总金额(元)
+						</div>
+						<div id="value">
+							0.00
+						</div>
+					</div><br /><br />
+					<div id="middle">
+						<button id="btGetBill" type="button" class="mui-btn mui-btn-blue mui-btn-outlined">索取发票</button>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<script type="text/javascript">
+			var loginName = JSON.parse(localStorage.getItem('info')).LoginName;
+			var value = document.getElementById('value');
+			var loading = document.getElementById('loading');
+			var main = document.getElementById('main');
+			var btn = document.getElementById('btGetBill');
+			window.onload = function() {
+				getBillSum(loginName);
+			}
+
+			function getBillSum(loginName) {
+				myUrl = HEAD + BODY_BILL + BILL;
+				myData = {
+					argLoginName: loginName,
+					argBillInfoType: "1",
+					argContractNo: ""
+				};
+				netRequest(myUrl, myData);
+
+			}
+
+			function getdata(data) {
+				setTimeout(function() {
+					setHtmlForSucceed(data);
+				}, 500);
+			}
+
+			function setHtmlForSucceed(data) {
+				if (data.Result == 1) {
+					localStorage.setItem('billsum', data.Table[0].UnBillingAmount);
+					sum = data.Table[0].UnBillingAmount;
+					value.innerHTML = sum;
+					loading.style.display = "none";
+					main.style.display = "block";
+				} else {
+					alert("网络访问失败,请检查您的网络");
+				}
+			}
+			btn.onclick = function() {
+				if (parseInt(sum) > 0){ 
+//					window.location.href = "getBillSet.html";
+					window.location.href='getBillChooseTitle.html';
+				}else{
+					alert('金额不足,不能索取发票');
+				}
+			}
+		</script>
+	</body>
+
+</html>

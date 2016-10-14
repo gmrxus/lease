@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>选择城市</title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/city.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="../js/city.js" type="text/javascript" charset="utf-8"></script>-->
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			#currentCity {
+				padding: 10px;
+			}
+			
+			.mui-table-view {
+				margin: 5px;
+			}
+			
+			.mui-col-xs-3 {
+				margin: 5px;
+			}
+			
+			.citytitle {
+				font-size: 14px;
+			}
+			
+			.item {
+				padding: 3px 5px;
+				cursor: pointer;
+			}
+			
+			.addbg {
+				background: #87A900;
+			}
+			/*.first {
+				border: solid #87A900 2px;
+				width: 300px;
+			}*/
+			
+			#append {
+				border: solid #87A900 2px;
+				border-top: 0;
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">选择城市</h1>
+		</header>
+		<div class="mui-content">
+
+			<!--<div id="currentCity">-->
+			<label class="citytitle">当前定位城市</label>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" id="currentCity">
+
+					<span class="mui-active mui-icon mui-icon-location mui-icon-location-filled"></span>
+					<label class="inline" id="currentCityName"></label>
+
+				</li>
+			</ul>
+			<!--</div>-->
+
+			<label class="citytitle">历史访问城市</label>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<center id="historyCity">
+						<!--<button type="button" class="inline mui-col-xs-3">武汉</button>-->
+						<!--<button type="button" class="inline mui-col-xs-3">咸阳</button>
+						<button type="button" class="inline mui-col-xs-3">咸阳</button>-->
+					</center>
+
+				</li>
+			</ul>
+
+			<label class="citytitle">热门城市</label>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<center>
+						<button type="button" class="inline mui-col-xs-3">北京市辖</button><button type="button" class="inline mui-col-xs-3">上海市辖</button><button type="button" class="inline mui-col-xs-3">广州</button>
+					</center>
+					<center>
+						<button type="button" class="inline mui-col-xs-3">深圳</button><button type="button" class="inline mui-col-xs-3">天津市辖</button><button type="button" class="inline mui-col-xs-3">南京</button>
+					</center>
+					<center>
+						<button type="button" class="inline mui-col-xs-3">杭州</button><button type="button" class="inline mui-col-xs-3">厦门</button><button type="button" class="inline mui-col-xs-3">武汉</button>
+					</center>
+				</li>
+			</ul>
+
+			<label class="citytitle">城市列表</label>
+			<div class="first"><input type="search" id="kw" onKeyup="getContent(this)" /></div>
+			<div id="append"></div>
+			<ul class="mui-table-view" id="citylist">
+
+			</ul>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var cityArr = new Array;
+		var historyCity;
+		if (localStorage.getItem("historyCity")) {
+			historyCity = JSON.parse(localStorage.getItem("historyCity"))
+		} else {
+			historyCity = new Array();
+		}
+		$(function() {
+			GetProvinceCity(localStorage.getItem("username"),"", false);
+			var historylist = ""
+			for (var i = 0; i < historyCity.length; i++) {
+				historylist += '<button type="button" class="inline mui-col-xs-3">' + historyCity[i] + '</button>';
+			}
+			$("#historyCity").append(historylist);
+			$(".mui-col-xs-3").on("tap", function() {
+//			alert("@")
+			for (var i = 0; i < cityArr.length; i++) {
+				if (cityArr[i].name == this.innerHTML) {
+					if (historyCity.length > 2) {
+						historyCity.shift()
+					}
+					historyCity.push(this.innerHTML)
+					window.localStorage.setItem("historyCity", JSON.stringify(historyCity));
+					if (localStorage.getItem("action") == "quchechengshi" || localStorage.getItem("action") == "quchemendian") {
+						window.localStorage.setItem("qucheCity", cityArr[i].name);
+						window.localStorage.setItem("huancheCity", cityArr[i].name);
+					} else if (localStorage.getItem("action") == "huanchechengshi") {
+						//						alert("2")
+						window.localStorage.setItem("huancheCity", cityArr[i].name);
+					}
+					window.localStorage.setItem("cityId", cityArr[i].cityId);
+					clicked("wangdian.html", true, false)
+				}
+			}
+		})
+		})
+
+		function getdata(data) {
+			var list = "";
+			//        a.sort();
+			data.Table.sort(function(a, b) {
+				return a.name.localeCompare(b.name)
+			});
+			cityArr = data.Table;
+			for (var i = 0; i < data.Table.length; i++) {
+				list += '<li class="mui-table-view-cell" id="' + data.Table[i].cityId + '">' + data.Table[i].name + '</li>'
+			if(data.Table[i].name == "凯里"){
+				
+			}
+			}
+			$("#citylist").append(list);
+		}
+		$("#citylist").on("tap", ".mui-table-view-cell", function() {
+			var cityId = this.getAttribute('id');
+			if (localStorage.getItem("action") == "quchechengshi") {
+				window.localStorage.setItem("qucheCity", this.innerHTML);
+			} else if (localStorage.getItem("action") == "huanchechengshi") {
+				window.localStorage.setItem("huancheCity", this.innerHTML);
+			}
+			if (historyCity.length > 2) {
+				historyCity.shift()
+			}
+			historyCity.push(this.innerHTML)
+			window.localStorage.setItem("historyCity", JSON.stringify(historyCity));
+			window.localStorage.setItem("cityId", cityId);
+			clicked("wangdian.html", true, false)
+		})
+		
+	</script>
+	<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		//	alert(localStorage.getItem("currentCityName"))
+		if (localStorage.getItem("currentCityName")) {
+			$("#currentCityName").text(localStorage.getItem("currentCityName"));
+		} else {
+			$("#currentCityName").text("获取定位信息失败");
+		}
+		document.getElementById("currentCity").addEventListener("click", function() {
+			var cityName = $("#currentCityName").text()
+			for (var i = 0; i < cityArr.length; i++) {
+				if (cityArr[i].name == cityName) {
+					if (localStorage.getItem("action") == "quchechengshi" || localStorage.getItem("action") == "quchemendian") {
+						window.localStorage.setItem("qucheCity", cityName);
+						window.localStorage.setItem("huancheCity", cityName);
+					} else if (localStorage.getItem("action") == "huanchechengshi") {
+						window.localStorage.setItem("huancheCity", cityName);
+					}
+					window.localStorage.setItem("cityId", cityArr[i].cityId);
+				}
+			}
+			//						alert(cityId);
+			//			mui.openWindow("wangdian.html");
+			clicked("wangdian.html", true, false)
+		});
+		$(document).keydown(function(e) {
+			e = e || window.event;
+			var keycode = e.which ? e.which : e.keyCode;
+			if (keycode == 38) {
+				if (jQuery.trim($("#append").html()) == "") {
+					return;
+				}
+				movePrev();
+			} else if (keycode == 40) {
+				if (jQuery.trim($("#append").html()) == "") {
+					return;
+				}
+				$("#kw").blur();
+				if ($(".item").hasClass("addbg")) {
+					moveNext();
+				} else {
+					$(".item").removeClass('addbg').eq(0).addClass('addbg');
+				}
+			} else if (keycode == 13) {
+				dojob();
+			}
+		});
+	</script>
+
+</html>

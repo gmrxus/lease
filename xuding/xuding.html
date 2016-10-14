@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>操作订单</title>
+
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css" />-->
+		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
+		<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="../js/mui.min.js"></script>
+		<!--<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<!--<script src="..js/app.js"></script>-->
+		<script src="../js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/websocket.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/time.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			html,
+			body,
+			.mui-content {
+				font-size: 90%;
+				color: #777;
+				height: 0px;
+				margin: 0px;
+				background-color: #efeff4;
+			}
+			
+			* {
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+			}
+			
+			#orderlist-main {
+				visibility: hidden;
+			}
+			
+			.order {
+				border: 1px solid #8F8F94;
+				overflow: hidden;
+				zoom: 1;
+			}
+			
+			.order div {
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			
+			.order1 {
+				line-height: 40px;
+				height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			.order1 span + span {
+				float: right;
+			}
+			
+			.order2 {
+				line-height: 40px;
+				height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			.vehicleAttr {
+				float: left;
+			}
+			
+			.vehicleType {
+				float: right;
+			}
+			
+			.order3 {
+				border-bottom: 1px solid #8F8F94;
+				overflow: hidden;
+			}
+			
+			.order3 div {
+				float: left;
+			}
+			
+			.takeTime {
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+			
+			.returnTime {
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+			
+			.days {
+				margin-top: 30px;
+			}
+			
+			.order4,
+			.order5 {
+				margin-bottom: 10px;
+			}
+			
+			.order4 {
+				height: 40px;
+				line-height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			@keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-webkit-keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-moz-keyframes rotate {
+				from {
+					-moz-transform: rotate(0deg)
+				}
+				to {
+					-moz-transform: rotate(360deg)
+				}
+			}
+			
+			@-ms-keyframes rotate {
+				from {
+					-ms-transform: rotate(0deg)
+				}
+				to {
+					-ms-transform: rotate(360deg)
+				}
+			}
+			
+			@-o-keyframes rotate {
+				from {
+					-o-transform: rotate(0deg)
+				}
+				to {
+					-o-transform: rotate(360deg)
+				}
+			}
+			
+			img {
+				animation: 9.5s linear 0s normal none infinite rotate;
+				-webkit-animation: 0.8s linear 0s normal none infinite rotate;
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+			}
+		</style>
+		<script>
+//			var st = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30 * 12 * 5);
+//			var et = new Date();
+			var stime = afterNowDay(-365*5,"day");
+			var etime = afterNowDay(365*5,"day"); 
+//			var stime = st.getFullYear() + "/" + st.getMonth() + "/" + st.getDate() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds();
+//			var etime = et.getFullYear() + 5 + "/" + (et.getMonth() + 1) + "/" + et.getDate() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds();
+//			alert(stime)
+//			alert(localStorage.getItem('username'))
+			
+			getOrderList(localStorage.getItem('username'), stime, etime);
+			//alert(localStorage.getItem('username'))
+			function getOrderList(username, takeTime, returnTime) {
+				var myUrl = HEAD + BODY + ORDER_LIST;
+//				alert(myUrl)
+				var myData = {
+					argLoginName: username,
+					argTakeTime: takeTime,
+					argReturnTime: returnTime
+				};
+//				alert(JSON.stringify(myData));
+				netRequest(myUrl, myData);
+			}
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="../index.html"></a>
+			<h1 class="mui-title">续订</h1>
+
+		</header>
+		<div class="mui-content">
+
+			<div class="mui-content-padded">
+
+				<div align="center" id="loading">
+					<img src="../images/loading_throbber.png" />
+				</div>
+
+				<div id="orderlist-main">
+
+				</div>
+
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var orderArray;
+			var loading = document.getElementById('loading');
+			var main = document.getElementById('orderlist-main');
+			var orderID = document.getElementById('orderID');
+			var orderStatus = document.getElementById('orderStatus');
+			var vehicleAttr = document.getElementById('vehicleAttr');
+			var vehicleType = document.getElementById('vehicleType');
+			var tekeTime = document.getElementById('takeTime');
+			var returnTime = document.getElementById('returnTime');
+			var days = document.getElementById('days');
+			var takeStore = document.getElementById('takeStore');
+			var returnStore = document.getElementById('returnStore');
+			$(".mui-title").text(localStorage.getItem("zhiling"));
+			if (localStorage.getItem("zhiling") == "还车" || localStorage.getItem("zhiling") == "开门" || localStorage.getItem("zhiling") == "锁门") {
+				sendmsg();
+			}
+
+			function getdata(data, myUrl) {
+				//				console.log(myUrl);
+				if (myUrl == HEAD + "/lease/WebService1.asmx/RetrieveOrderInfoByLoginName") {
+					if (data.Result == 1) {
+						var str = JSON.stringify(data.Table);
+						//						console.log(str);
+						orderArray = data.Table;
+						var html = "";
+						var zhiling = localStorage.getItem("zhiling");
+						for (var i = 0; i < orderArray.length; i++) {
+							var huanchetime;
+							if (orderArray[i].RenewReturnTime == "") {
+								huanchetime = orderArray[i].ExpectReturnTime
+							} else {
+								huanchetime = orderArray[i].RenewReturnTime
+							}
+							var realTakeTime = orderArray[i].RealTakeTime ? orderArray[i].RealTakeTime : orderArray[i].ExpectTakeTime;
+							var returnNetWord = orderArray[i].RealReturnCarNetworkName ? orderArray[i].RealReturnCarNetworkName : orderArray[i].ExpectReturnCarNetworkName;
+							if (zhiling == "续订" & orderArray[i].RenewReturnTime == "") {
+
+								if (orderArray[i].Status == 2 || orderArray[i].Status == 6 ) {
+
+									html += '<div class="order"><div class="order1">订单号:<span class="orderID">' + orderArray[i].OrderID + '</span><span class="orderStatus">' + setStatus(parseInt(orderArray[i].Status)) + '</span></div><div class="order2"><span class="vehicleAttr">车牌: ' + orderArray[i].VehicleNo + '</span><span class="vehicleType">车型: ' + orderArray[i].vehicleTypeName + '</span></div><div class="order3"><div class="takeTime">取车时间: ' + realTakeTime + '</div><div class="days">时长: ' + setDate(orderArray[i].ExpectTakeTime, huanchetime) + '</div><div class="returnTime">还车时间: ' + huanchetime + '</div></div><div class="order4"><span class="takeStore">取车门店: ' + orderArray[i].TakeCarNetworkName + '</span></div><div class="order5"><span class="returnStore">还车门店: ' + returnNetWord + '</span><br/>' +
+										'<button data-options="{}" id="' + orderArray[i].OrderID + 'xudingshijian" class="btn mui-btn mui-btn-block" style="float:left; font-size: 13px;width:70%;height:45px;border: hidden;">选择日期时间 ...</button>' + '<button type="button" class="mui-btn mui-btn-blue mui-btn-outlined mui-pull-right" id="' + orderArray[i].OrderID + '" onclick="xudingClick(this)">' + zhiling + '</button></div></div><br/>';
+									//								 
+								}
+							} else {
+								if (zhiling == "取车") {
+									if (orderArray[i].Status == 6 ) {
+										html += '<div class="order"><div class="order1">订单号:<span class="orderID">' + orderArray[i].OrderID + '</span><span class="orderStatus">' + setStatus(parseInt(orderArray[i].Status)) + '</span></div><div class="order2"><span class="vehicleAttr">车牌: ' + orderArray[i].VehicleNo + '</span><span class="vehicleType">车型: ' + orderArray[i].vehicleTypeName + '</span></div><div class="order3"><div class="takeTime">取车时间: ' + realTakeTime + '</div><div class="days">时长: ' + setDate(realTakeTime, huanchetime) + '</div><div class="returnTime">还车时间: ' + huanchetime + '</div></div><div class="order4"><span class="takeStore">取车门店: ' + orderArray[i].TakeCarNetworkName + '</span></div><div class="order5"><span class="returnStore">还车门店: ' + returnNetWord + '</span><br/><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined mui-pull-right" id="' + orderArray[i].OrderID + '" onclick="xudingClick(this)">' + zhiling + '</button></div></div><br/>';
+									}
+								}
+								if (zhiling == "还车") {
+									if (orderArray[i].Status == 2) {
+										html += '<div class="order"><div class="order1">订单号:<span class="orderID">' + orderArray[i].OrderID + '</span><span class="orderStatus">' + setStatus(parseInt(orderArray[i].Status)) + '</span></div><div class="order2"><span class="vehicleAttr">车牌: ' + orderArray[i].VehicleNo + '</span><span class="vehicleType">车型: ' + orderArray[i].vehicleTypeName + '</span></div><div class="order3"><div class="takeTime">取车时间: ' + realTakeTime + '</div><div class="days">时长: ' + setDate(realTakeTime, huanchetime) + '</div><div class="returnTime">还车时间: ' + huanchetime + '</div></div><div class="order4"><span class="takeStore">取车门店: ' + orderArray[i].TakeCarNetworkName + '</span></div><div class="order5"><span class="returnStore">还车门店: ' + returnNetWord + '</span><br/><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined mui-pull-right" id="' + orderArray[i].OrderID + '" onclick="xudingClick(this)">' + zhiling + '</button></div></div><br/>';
+									}
+								}
+								if (zhiling == "退订") {
+									if (orderArray[i].Status == 6) {
+										html += '<div class="order"><div class="order1">订单号:<span class="orderID">' + orderArray[i].OrderID + '</span><span class="orderStatus">' + setStatus(parseInt(orderArray[i].Status)) + '</span></div><div class="order2"><span class="vehicleAttr">车牌: ' + orderArray[i].VehicleNo + '</span><span class="vehicleType">车型: ' + orderArray[i].vehicleTypeName + '</span></div><div class="order3"><div class="takeTime">取车时间: ' + realTakeTime + '</div><div class="days">时长: ' + setDate(realTakeTime, huanchetime) + '</div><div class="returnTime">还车时间: ' + huanchetime + '</div></div><div class="order4"><span class="takeStore">取车门店: ' + orderArray[i].TakeCarNetworkName + '</span></div><div class="order5"><span class="returnStore">还车门店: ' + returnNetWord + '</span><br/><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined mui-pull-right" id="' + orderArray[i].OrderID + '" onclick="xudingClick(this)">' + zhiling + '</button></div></div><br/>';
+									}
+								}
+								if (zhiling == "开门") {
+									//									var a = ["2","10","11","12","13"]
+									//									console.log(orderArray[i].Status)
+									//									console.log());
+									if (orderArray[i].Status == 2) {
+										html += '<div class="order"><div class="order1">订单号:<span class="orderID">' + orderArray[i].OrderID + '</span><span class="orderStatus">' + setStatus(parseInt(orderArray[i].Status)) + '</span></div><div class="order2"><span class="vehicleAttr">车牌: ' + orderArray[i].VehicleNo + '</span><span class="vehicleType">车型: ' + orderArray[i].vehicleTypeName + '</span></div><div class="order3"><div class="takeTime">取车时间: ' + realTakeTime + '</div><div class="days">时长: ' + setDate(realTakeTime, huanchetime) + '</div><div class="returnTime">还车时间: ' + huanchetime + '</div></div><div class="order4"><span class="takeStore">取车门店: ' + orderArray[i].TakeCarNetworkName + '</span></div><div class="order5"><span class="returnStore">还车门店: ' + returnNetWord + '</span><br/><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined mui-pull-right" id="' + orderArray[i].OrderID + '" onclick="xudingClick(this)">' + zhiling + '</button></div></div><br/>';
+									}
+								}
+								if (zhiling == "锁门") {
+									if (orderArray[i].Status == 2) {
+										html += '<div class="order"><div class="order1">订单号:<span class="orderID">' + orderArray[i].OrderID + '</span><span class="orderStatus">' + setStatus(parseInt(orderArray[i].Status)) + '</span></div><div class="order2"><span class="vehicleAttr">车牌: ' + orderArray[i].VehicleNo + '</span><span class="vehicleType">车型: ' + orderArray[i].vehicleTypeName + '</span></div><div class="order3"><div class="takeTime">取车时间: ' + realTakeTime + '</div><div class="days">时长: ' + setDate(realTakeTime, huanchetime) + '</div><div class="returnTime">还车时间: ' + huanchetime + '</div></div><div class="order4"><span class="takeStore">取车门店: ' + orderArray[i].TakeCarNetworkName + '</span></div><div class="order5"><span class="returnStore">还车门店: ' + returnNetWord + '</span><br/><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined mui-pull-right" id="' + orderArray[i].OrderID + '" onclick="xudingClick(this)">' + zhiling + '</button></div></div><br/>';
+									}
+								}
+							}
+						}
+						loading.style.height = "0px";
+						loading.style.visibility = "hidden";
+						main.innerHTML = html;
+						main.style.visibility = "visible";
+						if (zhiling == "续订") {
+							(function($) {
+								var btns = $('.btn');
+								btns.each(function(i, btn) {
+									btn.addEventListener('tap', function() {
+										var now = new Date();
+										var nowYear = now.getFullYear(); //年
+										var endYear = nowYear + 1
+											//										var optionsJson = this.getAttribute('data-options') || '{}';
+											//										var options = JSON.parse(optionsJson);
+										if (btn.innerText == "选择日期时间 ...") {
+											btn.innerText = ""
+										}
+										var id = this.getAttribute('id');
+										var picker = new $.DtPicker({
+											type: "datetime",
+											beginYear: nowYear,
+											endYear: endYear,
+											value: btn.innerText
+										});
+										picker.show(function(rs) {
+											btn.innerText = rs.text;
+											picker.dispose();
+										});
+									}, false);
+								});
+							})(mui);
+						}
+					} else {
+						main.innerHTML = "您还没有生成订单"
+						loading.style.height = "0px";
+						loading.style.visibility = "hidden";
+						main.style.visibility = "visible";
+					}
+				}
+				if (myUrl == HEAD + "/lease/WebService1.asmx/CancelReservationApplyForApp") {
+					if (data.Result == 1) {
+						if (data.Table[0].status == 0) {
+							document.getElementById(localStorage.getItem("OrderID")).disabled = false;
+							mui.toast("退订失败")
+
+						}
+						if (data.Table[0].status == 1) {
+							mui.toast("订单状态已挂起，稍后请在订单列表中查询结果！")
+							setTimeout(function() {
+								window.location.reload();
+							}, 2000)
+
+						}
+						
+					}
+				}
+				//				console.log(myUrl)
+				//	http://111.175.187.206:2031/Lease/WebService1.asmx/IsAllowedCancelReservationApplyForApp
+				if (myUrl == HEAD + "/Lease/WebService1.asmx/IsAllowedCancelReservationApplyForApp") {
+					//		alert(myUrl)
+					if (data.Result == 1) {
+						if (data.Table[0].IsAllowed == 1) {
+							//							console.log(localStorage.getItem("OrderID"))
+							//							console.log(nowTimeStr.substr(2, nowTimeStr.length - 1))
+							CancelReservationApplyForApp(localStorage.getItem("OrderID"), nowTimeStr);
+
+						} else {
+							alert("对不起您的订单暂时不能退，如有需要，请与客服联系");
+							location.reload();
+
+							
+						}
+
+					}
+				}
+				if (myUrl == HEAD + "/lease/WebService1.asmx/RenewCar") {
+					if (data == 1) {
+						mui.toast("续订成功")
+						setTimeout(function() {
+							window.location.reload();
+						}, 1000)
+						
+					} else {
+						document.getElementById(localStorage.getItem("OrderID")).disabled = false;
+						mui.toast("续订失败")
+
+					}
+
+				}
+				if (myUrl == HEAD + "/Lease/WebService1.asmx/TakingCarsLimits") {
+					if (data.Result == 1) {
+						if (data.Table[0].IsAllowed == 0) {
+							var tishi = "取车时间可以提前" + data.Table[0].AdvanceMinutes + "分钟，您现在不能取车"
+							alert(tishi)
+
+						} else {
+							clicked("../quche/barcode_scan.html")
+
+						}
+					}
+
+				}
+				if (myUrl == HEAD + BODY + "/GetConsumeCostHistoryByOrderId") {
+					if (data.Result == 1) {
+						var tishi = "总钱数" + data.Table[0].RealConsumeAmt + "\n" + "详细信息请见详细订单"
+						alert(tishi)
+
+						setTimeout(function() {
+							clicked("../index.html",true,false);
+//							window.location.reload();
+						}, 1000)
+
+					}
+					
+				}
+			}
+			netNowDate()
+			var nowTimeStr;
+
+			function nowTime(e) {
+				nowTimeStr = e;
+			}
+			// var nowDate1 = netNowDate();
+			function xudingClick(e) {
+				//续订
+				window.localStorage.setItem("OrderID", e.id);
+				if (localStorage.getItem("zhiling") == "取车") {
+					for (var i = 0; i < orderArray.length; i++) {
+						if (orderArray[i].OrderID == e.id) {
+
+							var currentdate = nowTimeStr;
+
+							TakingCarsLimits(e.id, nowTimeStr);
+							//																					var data = {
+							//																						"signalName": "takeCar",
+							//																						"qrCode": orderArray[i].VehicleNo,
+							//																						"vehicleNo": orderArray[i].VehicleNo,
+							//																						"orderId": e.id,
+							//																						"account": localStorage.getItem("username"),
+							//																						"SystemNo": orderArray[i].SystemNo
+							//																					};
+							//																					var msg = {//																						"key": "client_message_lease",
+							//																						"sendType": "1",
+							//																						"receiver": "",
+							//																						"data": data,
+							//																						"timestamp": "",
+							//																						"sender": ""
+							//																					};
+							//																					var msgSend = JSON.stringify(msg) + "\b";
+							//																					ws.send(msgSend)
+							//							console.log(orderArray[i].VehicleNo);
+							window.localStorage.setItem("SystemNo", orderArray[i].SystemNo);
+							window.localStorage.setItem("VehicleNo", orderArray[i].VehicleNo);
+							//							window.localStorage.setItem("OrderID", e.id);
+							return;
+						}
+					}
+				}
+				e.disabled = true;
+				if (localStorage.getItem("zhiling") == "续订") {
+					var timeid = e.id + "xudingshijian"
+					var time = document.getElementById(timeid).innerHTML
+					if (time == "选择日期时间 ...") {
+						e.disabled = false;
+						alert("请选择时间")
+						return;
+					}
+					if (compareDate(time.replace(" ", "T"), nowTimeStr.replace(" ", "T")) < 0) {
+						alert("所选时间不能小于当前时间")
+						e.disabled = false;
+						return;
+					}
+					for (var i = 0; i < orderArray.length; i++) {
+						if (orderArray[i].OrderID == e.id) {
+							if (compareDate(time.replace(" ", "T"), orderArray[i].ExpectTakeTime) < 0) {
+								alert("所选时间不能小于取车时间")
+								e.disabled = false;
+								return;
+							}
+						}
+					}
+					renewCar(e.id, time, "0", "0");
+					return;
+				}
+				if (localStorage.getItem("zhiling") == "退订") {
+					//		var currentdate = nowDate();
+					IsAllowedCancelReservationApplyForApp(e.id);
+					//		CancelReservation(e.id, currentdate)
+					return;
+				}
+				setTimeout(function() {
+					if (timeout == true) {
+						mui.toast("超时")
+					}
+					e.disabled = false;
+				}, 20000)
+				if (localStorage.getItem("zhiling") == "还车") {
+					for (var i = 0; i < orderArray.length; i++) {
+						if (orderArray[i].OrderID == e.id) {
+
+							window.localStorage.setItem("SystemNo", orderArray[i].SystemNo);
+							window.localStorage.setItem("VehicleNo", orderArray[i].VehicleNo);
+							var data = {
+								"signalName": "returnCar",
+								"vehicleNo": orderArray[i].VehicleNo,
+								"orderId": e.id,
+								"account": localStorage.getItem("username"),
+								"SystemNo": orderArray[i].SystemNo
+							};
+							var msg = {
+								"key": "client_message_lease",
+								"sendType": "3",
+								"receiver": "",
+								"data": data,
+								"timestamp": "",
+								"sender": ""
+							};
+							var msgSend = JSON.stringify(msg) + "\b";
+							//														alert(msgSend)
+							ws.send(msgSend);
+							mui.toast("指令已发出，请等待")
+						}
+					}
+				}
+				if (localStorage.getItem("zhiling") == "开门") {
+					
+					for (var i = 0; i < orderArray.length; i++) {
+						if (orderArray[i].OrderID == e.id) {
+							var data = {
+								"signalName": "openDoor",
+								"vehicleNo": orderArray[i].VehicleNo,
+								"account": localStorage.getItem("username"),
+								"SystemNo": orderArray[i].SystemNo
+							};
+							var msg = {
+								"key": "client_message_lease",
+								"sendType": "3",
+								"receiver": "",
+								"data": data,
+								"timestamp": "",
+								"sender": ""
+							};
+							var msgSend = JSON.stringify(msg) + "\b";
+							ws.send(msgSend);
+							mui.toast("指令已发出，请等待")
+						}
+					}
+
+				}
+				if (localStorage.getItem("zhiling") == "锁门") {
+					for (var i = 0; i < orderArray.length; i++) {
+						if (orderArray[i].OrderID == e.id) {
+							var data = {
+								"signalName": "closeDoor",
+								"vehicleNo": orderArray[i].VehicleNo,
+								"account": localStorage.getItem("username"),
+								"SystemNo": orderArray[i].SystemNo
+							};
+							var msg = {
+								"key": "client_message_lease",
+								"sendType": "1",
+								"receiver": "",
+								"data": data,
+								"timestamp": "",
+								"sender": ""
+							};
+							var msgSend = JSON.stringify(msg) + "\b";
+
+							ws.send(msgSend);
+							mui.toast("指令已发出，请等待")
+
+							
+						}
+					}
+					
+				}
+				
+			}
+
+			function setStatus(e) {
+				switch (e) {
+					case 2:
+						return "已取车";
+					case 3:
+						return "已还车";
+					case 4:
+						return "已退订";
+					case 6:
+						return "已预定";
+					case 7:
+						return "变更车辆";
+					default:
+						return "状态未知";
+				}
+			}
+
+			function returncar() {
+				getConsumeCostHistoryByOrderId(localStorage.getItem("OrderID"))
+									console.log("huanche")
+			}
+
+			function setDate(stime, etime) {
+				var mdate = (new Date(etime) - new Date(stime)) / 1000;
+				var day = parseInt(mdate / 3600 / 24);
+				var hour = parseInt((mdate - day * 24 * 3600) / 3600);
+				var minute = parseInt((mdate - day * 24 * 3600 - hour * 3600) / 60);
+				return day + "天" + hour + "时" + minute + "分";
+			}
+		</script>
+		</div>
+	</body>
+
+</html>

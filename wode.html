@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			body {
+				text-align: center;
+			}
+			
+			#wode-coupon {
+				float: left;
+				width: 50%;
+				line-height: 70px;
+			}
+			
+			#wode-zhanghuyue {
+				float: right;
+				width: 50%;
+				line-height: 70px;
+			}
+			
+			img {
+				margin: 10px;
+				/*width: 40px;
+				height: 30px;*/
+			}
+			
+			.righttext {
+				text-align: left;
+				margin-top: 18px;
+				margin-left: 10px;
+			}
+			
+			.leftimage {
+				width: 40px;
+				height: 30px
+			}
+			
+			#my-head {
+				border-radius: 50%;
+				width: 40px;
+				height: 40px;
+				overflow: hidden
+			}
+			
+			#wode-coupon #wode-zhanghuyue {
+				width: 50%;
+				text-align: center;
+			}
+			
+			#wode-coupon {
+				border-right: solid;
+				border-right-width: 1px;
+				border-color: #BBBBBB;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="index.html"></a>
+			<h1 class="mui-title">我的</h1>
+		</header>
+
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media" id="Myusername">
+					<a href="javascript:;">
+						<img class="mui-pull-left" id="my-head" src="images/profle.png">
+						<div id="username" class="mui-pull-left righttext mui-navigate-right">
+							钱某某
+
+						</div>
+					</a>
+				</li>
+
+				<li class="mui-table-view-cell mui-media">
+					<div class="mui-pull-left" id="wode-coupon">
+						优惠券
+					</div>
+
+					<div class="mui-pull-right" id="wode-zhanghuyue">
+						账户余额
+					</div>
+				</li>
+				<li class="mui-table-view-cell mui-media" id="wode-yanzheng">
+					<a href="javascript:;">
+						<div>
+							<img class="mui-pull-left" src="images/yonghuxinxi.png">
+							<div class="mui-pull-left righttext mui-navigate-right" >
+								完善个人信息
+
+							</div>
+						</div>
+
+					</a>
+
+				</li>
+				<li class="mui-table-view-cell mui-media" id="wode-dingdan">
+					<a href="javascript:;">
+						<img class="mui-pull-left leftimage" src="images/dingdan.png">
+						<div class="mui-pull-left righttext mui-navigate-right">
+							订单查询
+
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media" id="wode-zhifu">
+					<a href="javascript:;">
+						<img class="mui-pull-left leftimage" src="images/weizhang.png">
+						<div class="mui-pull-left righttext mui-navigate-right">
+							违章查询
+
+						</div>
+					</a>
+				</li>
+				<li class="mui-table-view-cell mui-media" id="wode-fapiao">
+					<a href="javascript:;">
+						<img class="mui-pull-left leftimage" src="images/fapiao.png">
+						<div class="mui-pull-left righttext mui-navigate-right">
+							我的发票
+
+						</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+
+		<!--<div class="mui-content">
+			<div id="wode-head">
+				<div>
+					<img id="my-head" src="images/profle.png"  />
+				</div>
+			</div>
+			<div id="wode-wallet">
+				我的钱包
+				<div>
+				</div>
+				<div id="wode-coupon">
+					优惠券
+				</div>
+				<div id="wode-zhanghuyue">
+					账户余额
+				</div>
+			</div>
+			<div id="wode-yanzheng">
+				完善账户信息
+			</div>
+			<div id="wode-dingdan">
+				订单查询
+			</div>
+			<div id="wode-zhifu">
+				违章查询
+			</div>
+			<div id="wode-fapiao">
+				我的发票
+			</div>
+		</div>-->
+		<script type="text/javascript">
+			$("#username").text(localStorage.getItem("username"));
+			//			console.log(localStorage.getItem('info'))
+			//			var info = JSON.parse(localStorage.getItem('info'));
+
+			var info = JSON.parse(localStorage.getItem('info'));
+			login(info.LoginName, info.Password);
+
+			function login(username, psd) {
+				var myUrl = HEAD + BODY + LOGIN;
+				var myData = {
+					loginName: username,
+					passWord: psd,
+					checkType: 1,
+					argLeaseType: 2
+				};
+				netRequest(myUrl, myData);
+			}
+
+			function getdata(data) {
+				if (data.Result == 1) {
+					var str = JSON.stringify(data.Table[0]);
+					window.localStorage.setItem('info', str);
+					info = localStorage.getItem('info');
+				}
+			}
+			if (info.OrganizationID) {
+				document.getElementById("wode-fapiao").style.display = "none";
+			}
+			document.getElementById('Myusername').onclick = function() {
+				//				alert("2")
+				window.location.href = "personalData.html"
+					//				mui.open("personalData.html");
+					//				clicked("personalData.html");
+
+			}
+			document.getElementById('wode-dingdan').onclick = function() {
+				window.location.href = "orderList.html";
+				//				mui.open("orderList.html");
+				//				clicked("orderList.html");
+				//				
+			}
+			document.getElementById('wode-yanzheng').onclick = function() {
+				window.location.href = "uploadingIMG.html";
+				////				mui.open("uploadingIMG.html");
+				//				clicked("uploadingIMG.html");
+				//				
+			}
+			document.getElementById('wode-zhanghuyue').onclick = function() {
+				window.location.href = "yue.html";
+				////				mui.open("yue.htm");
+				//				clicked("yue.htm");
+				//				
+			}
+			document.getElementById('wode-coupon').onclick = function() {
+				window.location.href = "coupon1.html";
+				////				mui.open("coupon1.html");
+				//				clicked("coupon1.html");
+				//				
+			}
+			document.getElementById('wode-fapiao').onclick = function() {
+				window.location.href = "fapiaoManager.html";
+				////				mui.open("fapiaoManager.html");
+				//				clicked("fapiaoManager.html");
+				//				
+			}
+			document.getElementById('wode-zhifu').onclick = function() {
+				window.location.href = "regulation.html";
+				////				mui.open("regulation.html");
+				//				clicked("regulation.html");
+			}
+		</script>
+	</body>
+
+</html>

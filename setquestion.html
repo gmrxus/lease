@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+	</head>
+
+	<body>
+		<br />
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">设置密保问题</h1>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+
+				<div class="mui-input-row">
+					<label class="reg-word">安全问题:</label>
+					<select id="question">
+						<option value="0E0A941A-5A93-4F8B-83E0-DDC618D1BDAA">您中学班主任的姓名是?</option>
+						<option value="4FD7BD0F-0EB2-469C-A65F-205EBB107830">您配偶的姓名是?</option>
+						<option value="037BB4AA-C0C9-4013-954D-9E21A8F26C7D">您父亲的姓名是?</option>
+						<option value="14E73697-F4C8-4DF0-B83F-9C3C3D23D387">您母亲的姓名是?</option>
+						
+					</select>
+
+				</div>
+				<div class="mui-input-row">
+					<label class="reg-word">问题答案:</label>
+					<input id='answer' type="text" class="mui-input-clear mui-input" placeholder="请输入安全问题的答案">
+				</div>
+
+			</form>
+
+			<div class="mui-content-padded">
+				<button id='set' class="mui-btn mui-btn-block mui-btn-primary">设置</button>
+			</div>
+
+		</div>
+		<script type="text/javascript">
+			document.getElementById('set').onclick = function() {
+				var info = JSON.parse(localStorage.getItem('info'));
+				var questionID = document.getElementById('question').value;
+				var answer = document.getElementById('answer').value;
+				setQuestion(info.LoginName, info.Password, questionID, answer)
+			}
+
+			function setQuestion(loginName, psd, questionID, answer) {
+				var myUrl = HEAD + BODY + SET_QUESTION;
+				var myData = {
+					argLoginName: loginName,
+					argPwd: psd,
+					argQuestionId: questionID,
+					argAnswer: answer,
+					argLoginType: "1"
+				}
+				netRequest(myUrl, myData);
+			}
+
+			function getdata(data) {
+				if (data == 1) {
+					alert("设置成功");
+					window.location.href="wode.html";
+
+				} else {
+//					console.log("错误码:"+data);
+				}
+
+				}
+			
+		</script>
+	</body>
+
+</html>

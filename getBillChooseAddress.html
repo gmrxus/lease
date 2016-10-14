@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			#content{
+				margin: 10px;
+				
+			}
+			.addressItem{
+				margin-top: 10px;
+				border: 1px #aaa solid;
+				padding: 5px;
+			}
+			.name,.telephone{
+				float: left;
+			}
+			.telephone,.address,.postCode{
+				color: #888;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">选择地址</h1>
+		</header>
+		<div class="mui-content">
+			<div id="content">
+
+			</div>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init();
+			var loginName = JSON.parse(localStorage.getItem('info')).LoginName;
+			var cont = document.getElementById("content");
+			var addressArray;
+			var addressHtml = "";
+			window.onload = function() {
+				getBillAddress(loginName);
+
+			}
+
+			function getBillAddress(loginName) {
+				var myUrl = HEAD + BODY_BILL + GET_BILL_ADDRESS;
+				var myData = {
+					loginName: loginName
+				}
+				netRequest(myUrl, myData);
+			}
+
+			function getdata(data) {
+				if (data.Result == 1) {
+					addressArray = data.Table;
+					setView(addressArray);
+				}else{
+					setHint("您还没有设置收件地址,现在去设置?");
+				}
+			}
+
+			function setView(array) {
+				for (var i = 0; i < array.length; i++) {
+					addressHtml += '<div class="addressItem" ><div class="addressCont" onclick="onclickAddressInfo(' + i + ')"><div class="name">' + array[i].Recipients + '<span>&nbsp;&nbsp;&nbsp;</span></div><div class="telephone">' + array[i].Telephone + '</div><br/><div class="address">' +array[i].Area+'&nbsp;&nbsp;'+ array[i].DeliveryAddress + '</div><div class="postCode">' + array[i].PostCode + '</div></div></div>';
+				}
+				cont.innerHTML = addressHtml;
+			}
+			function onclickAddressInfo(i){
+				localStorage.setItem('addressInfo',JSON.stringify(addressArray[i]))
+				window.location.href='getBillInput.html';
+			}
+			function setHint(doc) {
+				title='<ul onclick="clickAddAddress()" style="padding-top: 30px; padding-bottom: 30px; padding-left: 10px"  class="mui-table-view">'+doc+'</ul>';
+				cont.innerHTML = title;
+			}
+			function clickAddAddress(){
+				window.location.href="addDizhi.html";
+			}
+		</script>
+	</body>
+
+</html>

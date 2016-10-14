@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			.company {
+				color: #0062CC;
+				font-size: 16px;
+			}
+			
+			.place {
+				font-size: 13px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">列表</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<!--<a href="reservations/chooseTime.html"></a>-->
+				<!--<li class="mui-table-view-cell">
+					<a class="mui-navigate-right">
+						<span class="company">
+	                	海南哒哒总部
+	                </span>
+						<span class="place">
+	                	同心路同心家园
+	                </span>
+					</a>
+				</li>-->
+
+			</ul>
+		</div>
+
+	</body>
+	<script type="text/javascript">
+		//	alert('2')
+		//		var list="";
+		//		
+		var dataArr = JSON.parse(localStorage.getItem("dataStr"));
+		for (var i = 0; i < dataArr.length; i++) {
+//			console.log(dataArr.NetworkName);
+			var list = '<li class="mui-table-view-cell" id='+dataArr[i].NetworkName+'><a class="mui-navigate-right"><span class="company">'+dataArr[i].NetworkName+'</span></br><span class="place">'+dataArr[i].NetworkAddress+'</span></a></li>';
+			$('.mui-table-view').append(list);
+		};
+		$(".mui-table-view").on("tap", ".mui-table-view-cell", function() {
+			var id = this.getAttribute('id');
+//			alert(id);
+			window.localStorage.setItem("quchemendian",id);
+			window.localStorage.setItem("huanchemendian",id);
+			
+			clicked("../zijia/chooseitime.html",true,false);
+		});
+	 
+	</script>
+
+</html>

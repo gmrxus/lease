@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>注册</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.enterfocus.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/jquery-1.11.1.min.js" type="text/javascript" charset="UTF-8"></script>
+
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+		</script>
+		<style>
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			
+			.mui-input-group label {
+				width: 30%;
+			}
+			
+			.mui-input-row label~ input,
+			.mui-input-row label~ select,
+			.mui-input-row label~ textarea {
+				width: 70%;
+			}
+			
+			.mui-checkbox input[type=checkbox] .mui-radio input[type=radio] {
+				top: 6px;
+			}
+			
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			
+			.mui-btn {
+				padding: 10px;
+			}
+			
+			div {
+				font-size: 15px;
+			}
+		</style>
+		<script type="text/javascript">
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">注册</h1>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label class="reg-word">账号:</label>
+					<input id='username' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+				</div>
+				<div class="mui-input-row">
+					<label class="reg-word">密码:</label>
+					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+				</div>
+				<div class="mui-input-row">
+					<label class="reg-word">密码确认:</label>
+					<input id='password-verity' type="password" class="mui-input-clear mui-input" placeholder="请确认您的密码">
+				</div>
+				<div class="mui-input-row">
+					<label class="reg-word">真实姓名:</label>
+					<input id='realname' type="text" class="mui-input-clear mui-input" placeholder="请输入您的真实姓名">
+				</div>
+
+				<div class="mui-input-row">
+					<label class="reg-word">手机号码:</label>
+					<input id='phone' type="number" class="mui-input-clear mui-input" placeholder="请输入手机号码">
+				</div>
+				<div class="mui-input-row">
+					<label class="reg-word">身份证号:</label>
+					<input id='idCardID' type="text" class="mui-input-clear mui-input" placeholder="请输入身份证号码">
+				</div>
+				<div class="mui-input-row">
+					<label class="reg-word">驾驶证号:</label>
+					<input id='driverLicenseNo' type="text" class="mui-input-clear mui-input" placeholder="请输入驾驶证号码">
+				</div>
+				<div class="mui-input-row">
+					<label class="reg-word">邮箱:</label>
+					<input id='email' type="text" class="mui-input-clear mui-input" placeholder="请输入您的邮箱地址(可不填)">
+				</div>
+
+				<div class="mui-input-row">
+					<label class="reg-word">性别:</label>
+
+					<span><input id="male" type="radio" checked="checked" name="sex" value="male">男&ensp;<input type="radio"
+                                                                                                        name="sex"
+                                                                                                        value="female">女</span>
+
+				</div>
+
+			</form>
+
+			<div class="mui-content-padded">
+				<button id='reg' class="mui-btn mui-btn-block mui-btn-primary">注册</button>
+			</div>
+
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script type="text/javascript">
+			document.getElementById('reg').onclick = function() {
+				var regn = new RegExp("[\\u4e00-\\u9FFF]+", "g"); //是否为汉字
+				var sex = document.getElementById('male').checked ? "1" : "0";
+				username = document.getElementById('username').value;
+				psd = document.getElementById('password').value;
+				var psdv = document.getElementById('password-verity').value;
+				var realName = document.getElementById('realname').value;
+				var phoneNumber = document.getElementById('phone').value;
+				var idCardID = document.getElementById('idCardID').value;
+				var email = document.getElementById('email').value;
+				var driverLicenseNo = document.getElementById('driverLicenseNo').value;
+				if(!document.getElementById('username').value) {
+					alert('请输入账号');
+				} else if(!document.getElementById('password').value) {
+					alert('请输入密码');
+				} else if(!document.getElementById('password-verity').value) {
+					alert('请再次输入密码');
+				} else if(!document.getElementById('realname').value) {
+					alert('请输入您的真实姓名');
+				} else if(!document.getElementById('phone').value) {
+					alert('请输入手机号码');
+
+				} else if(!idCardID) {
+					alert(idCardID)
+
+					alert("请输入身份证号码");
+				} else if(!driverLicenseNo) {
+					alert("请输入驾驶证号码");
+				} else {
+					if(username.length < 5) {
+						alert("会员长度必须大于5位");
+					} else if(psd.length < 6) {
+						alert("密码必须大于6位")
+					} else if(psdv != psd) {
+						alert("密码必须一致")
+					} else if(!(/(^\d{11}$)/.test(phoneNumber))) {
+						alert("手机号码格式不对");
+					} else if(!regn.test(realName)) {
+						alert("请填写你的真实姓名");
+					} else if(!(/(^\d{15}$)|(^\d{17}([0-9]|[X|x])$)/.test(idCardID))) {
+						alert("您输入的身份证号码格式不正确");
+					} else if(driverLicenseNo.substring(0, driverLicenseNo.length - 1) != idCardID.substring(0, idCardID.length - 1) || !(/(^\d{15}$)|(^\d{17}([0-9]|[X|x])$)/.test(driverLicenseNo))) {
+						alert("您输入的驾驶证号码和身份证号码不符")
+					} else if(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/.test(email) || !email) {
+						register(username, psd, realName, phoneNumber, sex, email, idCardID, driverLicenseNo);
+					} else {
+						alert("邮箱地址不合法");
+					}
+				}
+			}
+
+			function register(username, psd, realname, phoneNumber, sex, email, idCardID, driverLicenseNo) {
+				var myUrl = HEAD + BODY + REGISTER;
+				var myData = {
+					loginName: username, //登录名
+					passWord: psd, //密码
+					telephone: phoneNumber, // (电话)(非空),
+					idCardID: idCardID, //身份证
+					trueName: realname, //真实姓名
+					driverLicenseNo: driverLicenseNo, //驾驶证
+					sex: sex, //性别
+					email: email, // (邮箱),
+					levelID: "2", // (会员等级)(非空),
+					status: "0", // (状态)(非空),
+					argIDCardIMGPath: "",
+					argDriverLicenseIMGPath: "",
+					BankCardNo: "" // (银行卡号)
+				};
+				netRequest(myUrl, myData);
+			}
+
+//			function getdata(data) {
+//				if(data == 1) {
+//					alert('注册成功,请上传照片提交审核');
+//					login(username, psd);
+//					mui.openWindow('uploadingIMG.html');
+//				} else if(data == 0) {
+//					alert('注册失败');
+//				} else if(data == 20) {
+//					alert('该电话号码已经注册');
+//				} else if(data == 30) {
+//					alert('该登录名已经存在');
+//				} else if(data == 10) {
+//					alert('该用户已经存在');
+//				} else if(data == 40) {
+//					alert("该身份证已经被注册");
+//				} else {
+//					alert(data);
+//				}
+//			}
+
+			function login(username, psd) {
+				var myUrl = HEAD + BODY + LOGIN;
+				var myData = {
+					loginName: username,
+					passWord: psd,
+					checkType: 1,
+					argLeaseType: 2
+				};
+				netRequest(myUrl, myData);
+			}
+
+			function getdata(data, mUrl) {
+				if(mUrl == HEAD + BODY + LOGIN) {
+					if(data.Result == 1) {
+						if("0" == data.Table[0].IsFreeze) {
+							var info = JSON.stringify(data.Table[0]);
+							//console.log(info)
+							window.localStorage.setItem('info', info);
+							window.localStorage.setItem('username', username);
+							alert('登陆成功');
+							mui.openWindow('uploadingIMG.html');
+						} else {
+							alert("您的账号被冻结");
+						}
+
+					} else {
+						alert('账号或密码不正确')
+					}
+				}
+				if(mUrl == HEAD + BODY + REGISTER) {
+					if(data == 1) {
+						alert('注册成功,请上传照片提交审核');
+						login(username, psd);
+						
+					} else if(data == 0) {
+						alert('注册失败');
+					} else if(data == 20) {
+						alert('该电话号码已经注册');
+					} else if(data == 30) {
+						alert('该登录名已经存在');
+					} else if(data == 10) {
+						alert('该用户已经存在');
+					} else if(data == 40) {
+						alert("该身份证已经被注册");
+					} else {
+						alert(data);
+					}
+
+				}
+			}
+		</script>
+
+	</body>
+
+</html>

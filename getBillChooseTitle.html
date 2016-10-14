@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			#content {
+				padding: 10px;
+			}
+			
+			.title_item {
+				padding: 15px;
+				border: 1px solid #000;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">选择抬头</h1>
+		</header>
+		<div class="mui-content">
+			<div id="content">
+				
+			</div>
+
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+			var loginName = JSON.parse(localStorage.getItem('info')).LoginName;
+			var cont = document.getElementById("content");
+			var titleArray;
+			var titleHtml = "";
+			window.onload = function() {
+				getBillTitle(loginName);
+			}
+
+			function getBillTitle(loginName) {
+				var myUrl = HEAD + BODY_BILL + GET_BILL_TITLE;
+				var myData = {
+					loginName: loginName
+				}
+				netRequest(myUrl, myData);
+			}
+
+			function getdata(data) {
+
+				if (data.Result == 1) {
+					titleArray = data.Table;
+					setView(titleArray)
+				} else {
+					setHint("您还没有设置抬头,现在去设置?");
+				}
+
+			}
+
+			function setView(array) {
+				for (var i = 0; i < array.length; i++) {
+//					titleHtml += '<div class="title_item"><div class="title_doc" onclick="clickTitleInfo(' + i + ')">' + array[i].Title + '</div></div>'
+					titleHtml+='<ul class="mui-table-view"><li onclick="clickTitleInfo(' + i + ')" class="mui-table-view-cell"><a class="mui-navigate-right">'+array[i].Title+'</a></li></ul>';
+					
+				}
+				cont.innerHTML = titleHtml;
+			}
+
+			function setHint(doc) {
+				title='<ul onclick="clickAddTitle()" style="padding-top: 30px; padding-bottom: 30px; padding-left: 10px"  class="mui-table-view">'+doc+'</ul>';
+				cont.innerHTML = title;
+			}
+
+			function clickTitleInfo(i) {
+				localStorage.setItem('titleInfo', titleArray[i].Title);
+				//				alert(localStorage.getItem('titleInfo'));
+				window.location.href = "getBillChooseAddress.html";
+			}
+			function clickAddTitle(){
+				window.location.href="addTaitou.html";
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>预订</title>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Wh96gBKbRO21zR5TM13Mxj9LtL233AWX"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
+		<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			.citylab {
+				margin-left: 13px;
+				color: #AAAAAA;
+				display: inline-table;
+			}
+			
+			.city {
+				margin-left: 5px;
+				width: 50%;
+				display: inline-table;
+			}
+			
+			.mendianlab {
+				margin-left: 37px;
+				color: #AAAAAA;
+				display: inline-table;
+			}
+			
+			.days {
+				float: left;
+				text-align: center;
+				margin-left: 10%;
+				margin-top: 20px;
+				width: 35px;
+				height: 35px;
+			}
+			
+			#openPopover {
+				display: inline;
+				margin-top: 20px;
+				padding-top: 10px;
+				font-size: 17px;
+			}
+			
+			img {
+				margin-top: 5px;
+				margin-left: 0px;
+			}
+			
+			.mui-popover {
+				width: 100%;
+			}
+			
+			a {
+				color: #1E90FF;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<header class="mui-bar mui-bar-nav">
+			<a class=" mui-icon mui-icon-left-nav mui-pull-left"></a>
+
+			<center>
+
+				<a href="#popover" id="openPopover" class="mui-btn mui-btn-primary">
+					短租自驾
+				</a>
+
+			</center>
+
+		</header>
+
+		<div class="mui-content">
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+
+					<div style="float: left;display: inline-table;width: 100%;">
+
+						<span class="mui-active mui-icon mui-icon-location mui-icon-location-filled"></span>
+						<span class="citylab">取车城市 |</span>
+
+						<span class="city" id="quchechengshi">
+							<a id="quchecity">
+
+							</a>
+						</span>
+					</div>
+
+					<!--<div class="mui-pull-right">
+						<div style="color: #BBBBBB;font-size: 10px;">
+							送车上门
+						</div>
+						<div id="sendCar" class="mui-switch mui-switch-mini">
+
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>-->
+
+				</li>
+
+				<li class="mui-table-view-cell">
+					<div id="quchemendianoradd" class="mendianlab">取车门店 |</div>
+
+					<div class="city" id="quche">
+						<a class="mui-navigate-right " id="quchemendian">
+
+						</a>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div style="float:left;display: inline-table;width: 100%;">
+
+						<span class="mui-active mui-icon mui-icon-location mui-icon-location-filled"></span>
+						<div class="citylab">还车城市 |</div>
+						<div class="city" id="huanchechengshi">
+							<a id="huanchecity">
+							</a>
+						</div>
+					</div>
+					<!--<div class="mui-pull-right">
+						<div style="color: #BBBBBB;font-size: 10px;">
+							上门取车
+						</div>
+						<div id="takeCar" class="mui-switch mui-switch-mini">
+
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>-->
+				</li>
+
+				<li class="mui-table-view-cell">
+					<div id="huanchemendianoradd" class="mendianlab">还车门店 |</div>
+
+					<div class="city" id="huanche">
+
+						<a class="mui-navigate-right" id="huchemendian">
+
+						</a>
+
+					</div>
+
+				</li>
+
+				<li class="mui-table-view-cell">
+
+					<div style="float:left; width:33%;text-align: center;">
+						<span style="font-size: 14px;">
+	        			取车时间
+	       </span><br />
+						<button id='quchetime' data-options='{}' style="font-size: 13px;height: 100px; white-space: normal;" class="btn mui-btn mui-btn-block">选择日期时间 ...</button>
+					</div>
+					<center class="days">
+						<span class="mui-badge mui-badge-primary" id="daysvalue"></span>
+					</center>
+					<div style="float:right; width:33%;text-align: center;">
+						<span style="font-size: 14px; ">
+	        			还车时间
+	        		</span><br />
+
+						<button id='huanchetime' data-options='{}' style="font-size: 13px;height: 100px;  white-space: normal;" class="btn mui-btn mui-btn-block">选择日期时间 ...</button>
+
+					</div>
+
+				</li>
+			</ul>
+			<center>
+				<button type="button" class="mui-btn mui-btn-yellow" style="width: 80%;margin: 10px;" onclick="chooseCar()">立即去选车</button>
+			</center>
+
+		</div>
+		<div id="popover" class="mui-popover">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell" style="background-color: white;font-size: 14px;">
+					<div style="float: left;width: 50%;border-right:1px solid #BBBBBB ;" onclick="duanzu(this)">
+						<center>
+							<img style="width: 50px;height: 50px;" src="../images/duanzuzijia.png" />
+							<div style="width: 100%;">
+								短租自驾
+							</div>
+
+						</center>
+
+					</div>
+					<div style="float: right;width: 50%" onclick="changzu(this)">
+						<center>
+							<img style="width: 50px;height: 50px;" src="../images/changzufuwu.png" />
+							<div style="width: 100%;">
+								长租服务
+							</div>
+
+						</center>
+					</div>
+				</li>
+
+			</ul>
+		</div>
+		<div id="allmap"></div>
+	</body>
+	<script>
+		$(".mui-icon-left-nav").on("tap", function() {
+			clicked("../index.html", true, false)
+		})
+		mui('.mui-popover').popover('hide', document.getElementById("openPopover"));
+		//选择短租或者长租
+		if (localStorage.getItem("zijiatitle")) {
+
+			document.getElementById("openPopover").innerHTML = localStorage.getItem("zijiatitle") + '<img id="upimg" style="display: inline;" src="../images/down.png" />';
+		} else {
+			document.getElementById("openPopover").innerHTML = "短租自驾" + '<img id="upimg" style="display: inline;" src="../images/down.png" />';
+		}
+		document.getElementById("openPopover").addEventListener('click', function() {
+				document.getElementById("upimg").src = "../images/up.png";
+			})
+			//短租
+		function duanzu(t) {
+
+			document.getElementById("openPopover").innerHTML = "短租自驾";
+			window.localStorage.setItem("zijiatitle", "短租自驾")
+			mui('.mui-popover').popover('toggle', document.getElementById("openPopover"));
+			window.location.reload();
+		}
+		//长租
+		function changzu(t) {
+			document.getElementById("openPopover").innerHTML = "长租服务";
+			window.localStorage.setItem("zijiatitle", "长租服务")
+			mui('.mui-popover').popover('toggle', document.getElementById("openPopover"));
+			window.location.reload();
+		}
+	</script>
+
+	<script type="text/javascript">
+		var cityName;
+
+		//门店城市初始化
+		var qucheCity = document.getElementById("quchecity");
+		var quchemendian = document.getElementById("quchemendian");
+		var huancheCity = document.getElementById("huanchecity");
+		var huanchemendian = document.getElementById("huchemendian");
+		var quchetime1 = document.getElementById("quchetime");
+		var huanchetime1 = document.getElementById("huanchetime");
+
+		localStorage.getItem("quchemendian") == null ? quchemendian.innerHTML = "请选择取车门店" : quchemendian.innerHTML = localStorage.getItem("quchemendian")
+		localStorage.getItem("huanchemendian") == null ? huanchemendian.innerHTML = "请选择还车门店" : huanchemendian.innerHTML = localStorage.getItem("huanchemendian")
+		localStorage.getItem("qucheCity") == null ? qucheCity.innerHTML = "请选择取车城市" : qucheCity.innerHTML = localStorage.getItem("qucheCity")
+		localStorage.getItem("huancheCity") == null ? huancheCity.innerHTML = "请选择还车城市" : huancheCity.innerHTML = localStorage.getItem("huancheCity")
+			//是否送车上门或者上门取车
+			/*
+		var sendCar = false;
+		var takeCar = false;
+		document.getElementById("sendCar").addEventListener("toggle", function(event) {
+			if (event.detail.isActive) {
+				document.getElementById("quchemendianoradd").innerHTML = "取车地址 |";
+				document.getElementById("quchemendianoradd").style.color = "green"
+				quchemendian.innerHTML = "请选择取车地址"
+				sendCar = true;
+			} else {
+				document.getElementById("quchemendianoradd").innerHTML = "取车门店 |";
+				document.getElementById("quchemendianoradd").style.color = "#AAAAAA"
+				localStorage.getItem("quchemendian") == null ? quchemendian.innerHTML = "请选择取车门店" : quchemendian.innerHTML = localStorage.getItem("quchemendian")
+				sendCar = false;
+			}
+		})
+		document.getElementById("takeCar").addEventListener("toggle", function(event) {
+				if (event.detail.isActive) {
+					document.getElementById("huanchemendianoradd").innerHTML = "还车地址 |";
+					document.getElementById("huanchemendianoradd").style.color = "green"
+					huanchemendian.innerHTML = "请选择还车地址"
+
+					takeCar = true;
+				} else {
+					document.getElementById("huanchemendianoradd").innerHTML = "还车门店 |";
+					document.getElementById("huanchemendianoradd").style.color = "#AAAAAA"
+					localStorage.getItem("huanchemendian") == null ? huanchemendian.innerHTML = "请选择还车门店" : huanchemendian.innerHTML = localStorage.getItem("huanchemendian")
+
+					takeCar = false;
+				}
+			})*/
+			//选择门店或者城市
+		$(".mui-table-view").on("tap", ".city", function() {
+			localStorage.setItem("action", this.id);
+			if (this.id == "quche" || this.id == "huanche") {
+				//门店
+				if (this.id == "quche") {
+
+					cityName = document.getElementById("quchecity").innerHTML
+				} else {
+					cityName = document.getElementById("huanchecity").innerHTML
+				}
+				GetProvinceCity("", false,localStorage.getItem("username"));
+			} else if (this.id == "quchechengshi" || this.id == "huanchechengshi") {
+				//城市
+				if (this.id == "quchechengshi") {
+
+					window.localStorage.setItem("currentCityName", document.getElementById("quchecity").innerHTML);
+				} else {
+
+					window.localStorage.setItem("currentCityName", document.getElementById("huanchecity").innerHTML);
+				}
+				clicked("city.html", true, false);
+			}
+		})
+
+		//选车按钮
+		function chooseCar() {
+			netNowDate()
+
+		}
+		//时间加减乘除
+		function nowTime(nowTimeStr) {
+			var startTime = quchetime1.innerHTML
+				//			console.log(huanchetime1.value);
+			var endTime = huanchetime1.innerHTML
+				//			huanchetime1.value ＝ "2016-06-08T17:11:31";
+			if (quchemendian.innerHTML != "请选择取车门店" && huanchemendian.innerHTML && quchetime1.innerHTML && huanchetime1.innerHTML && huanchemendian.innerHTML != "请选择还车门店") {
+
+				if (compareDateAndTime(quchetime1.innerHTML.replace(" ", "T"), nowTimeStr.replace(" ", "T")) < 0) {
+		
+					document.getElementById("openPopover").text == "短租自驾" ? alert("取车时间不能小于实际时间") : alert("请提前一天订车，谢谢");
+
+					return;
+				}
+				//				if (setDate(quchetime1.innerHTML.replace(" ", "T"), huanchetime1.innerHTML.replace(" ", "T")) > 2) {
+				//					alert("所选时间不能大于3天")
+				//					return;
+				//				}
+				//				var currentdate = new Date();
+				//				if (compareDate(quchetime1.innerHTML.replace(" ", "T"), currentdate) < 0) {
+				//					alert("取车时间不能小于当前时间")
+				//					return;
+				//				}
+				if (compareDateAndTime(quchetime1.innerHTML.replace(" ", "T"), huanchetime1.innerHTML.replace(" ", "T")) > 0) {
+					alert("取车时间不能大于还车时间")
+					return;
+				}
+
+				window.localStorage.setItem("quchemendian", quchemendian.innerHTML)
+				window.localStorage.setItem("startTime", startTime)
+				window.localStorage.setItem("endTime", endTime)
+				window.localStorage.setItem("huanchemendian", huanchemendian.innerHTML)
+				if (quchemendian.innerHTML != huanchemendian.innerHTML) {
+					GetDifferentCityNetworkCost(localStorage.getItem("quchenetworkId"), localStorage.getItem("huanchenetworkId"));
+				} else {
+					localStorage.removeItem("tishititle")
+					localStorage.removeItem("tishiweiba")
+					clicked("carType.html", true, false);
+				}
+			} else {
+				alert("数据不完整")
+			}
+		}
+
+		function compareDateAndTime(stime, etime) {
+			//- 8 * 3600 * 1000
+			var bool;
+			//			if (document.getElementById("openPopover").innerHTML == "短租服务") {
+			//				bool = new Date(stime) - new Date(etime);
+			//			}else{
+			//				bool = new Date(stime) - new Date(etime) + 24 * 3600 * 1000;
+			//				
+			//			}
+			bool = new Date(stime) - new Date(etime)
+
+			return bool;
+		}
+
+		function setdetailDate(stime, etime) {
+			if (localStorage.getItem("zijiatitle") == "长租服务") {
+				var mdate = (new Date(etime) - new Date(stime)) / 1000;
+				var day = Math.ceil(mdate / 3600 / 24);
+				//			var hour = parseInt((mdate - day * 24 * 3600) / 3600);
+				//			var minute = parseInt((mdate - day * 24 * 3600 - hour * 3600) / 60);
+				var value = day + "天"
+				window.localStorage.setItem("days", value);
+				var minute = parseInt(mdate / 60);
+				window.localStorage.setItem("minute", minute);
+				return value;
+			} else {
+				var mdate = (new Date(etime) - new Date(stime)) / 1000;
+				var hour = Math.ceil(mdate / 3600);
+				var value = hour + "小时"
+				window.localStorage.setItem("days", value);
+				var minute = parseInt(mdate / 60);
+				window.localStorage.setItem("minute", minute);
+				return value;
+			}
+		}
+
+		function setDate(stime, etime) {
+			var mdate = (new Date(etime) - new Date(stime)) / 1000;
+			var day = parseInt(mdate / 3600 / 24);
+			var hour = parseInt((mdate - day * 24 * 3600) / 3600);
+			var minute = parseInt((mdate - day * 24 * 3600 - hour * 3600) / 60);
+			return day;
+		}
+	</script>
+
+	<!--定位-->
+
+	<script>
+		//城市ID
+		var cityArr = new Array;
+
+		function getdata(data, myUrl) {
+			//			console.log(myUrl);
+			if (myUrl == HEAD + "/lease/WsLeaseBasis.asmx/GetProvinceCity") {
+				cityArr = data.Table;
+				for (var i = 0; i < cityArr.length; i++) {
+					if (cityArr[i].name == cityName) {
+						window.localStorage.setItem("cityId", cityArr[i].cityId);
+						/*if (sendCar == true) {
+							clicked("addressMap.html", false, false);
+						} else {
+							clicked("wangdian.html", true, false);
+						}*/
+						clicked("wangdian.html", true, false);
+					}
+				}
+			} else if (myUrl == HEAD + "/Lease/WsLeaseOrderBusiness.asmx/GetDifferentCityNetworkCost") {
+				var tishi;
+				var tishititle;
+				var tishiweiba;
+				if (parseInt(data.Table[0].differentCityCost) > 0) {
+					tishititle = "异地还车费";
+					tishiweiba = data.Table[0].differentCityCost + "元/次"
+					tishi = "温馨提示：异地还车费" + data.Table[0].differentCityCost + "元/次"
+				} else {
+					tishititle = "异店还车费";
+					tishiweiba = data.Table[0].differentNetworkCost + "元/次"
+					tishi = "温馨提示：异店还车费" + data.Table[0].differentNetworkCost + "元/次"
+				}
+				var isopen = confirm(tishi);
+				if (isopen == 0) {
+					localStorage.removeItem("tishititle")
+					localStorage.removeItem("tishiweiba")
+				} else {
+					window.localStorage.setItem("tishititle", tishititle)
+					window.localStorage.setItem("tishiweiba", tishiweiba)
+					clicked("carType.html", true, false);
+				}
+				//				alert(tishi)
+			}
+		}
+		//		alert(localStorage.getItem("qucheCity"))
+		if (localStorage.getItem("qucheCity") == null) {
+			var map = new BMap.Map("allmap");
+			var point = new BMap.Point(116.331398, 39.897445);
+			map.centerAndZoom(point, 12);
+			var geolocation = new BMap.Geolocation();
+			var geoc = new BMap.Geocoder();
+			geolocation.getCurrentPosition(function(r) {
+				if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+					geoc.getLocation(r.point, function(rs) {
+						var addComp = rs.addressComponents;
+						cityName = addComp.city.substring(0, addComp.city.length - 1);
+						qucheCity.innerHTML = cityName;
+						huancheCity.innerHTML = cityName;
+						GetProvinceCity("", false,localStorage.getItem("username"));
+						window.localStorage.setItem("qucheCity", cityName)
+						window.localStorage.setItem("huancheCity", cityName)
+						window.localStorage.setItem("action", "quche");
+						var historyCity = new Array;
+						historyCity.push(cityName);
+						window.localStorage.setItem("historyCity", JSON.stringify(historyCity));
+					});
+				} else {
+					alert('failed' + this.getStatus());
+				}
+			}, {
+				enableHighAccuracy: true
+			})
+		}
+	</script>
+	<script src="../js/time.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		(function($) {
+			$.init();
+			var btns = $('.btn');
+			btns.each(function(i, btn) {
+				btn.addEventListener('tap', function() {
+					//					var optionsJson = this.getAttribute('data-options') || '{}';
+					//						{"type":"hour","customData":{"h":[{"text":"上午","value":"上午"},{"text":"下午","value":"下午"},{"text":"晚上","value":"晚上"}]},"labels":["年", "月", "日", "时段", "分"]}
+					var now = new Date();
+					var nowYear = now.getFullYear(); //年
+					var endYear = nowYear + 1
+						//					optionsJson = '{"value":"' + btn.innerText + '","beginYear":'+nowYear+',"endYear":'+nowYear+'}'
+						//					optionsJson = '{"value":"' + btn.innerText + '",new Date(2016,10),new Date(2016,11)}'
+						//					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					var dateType = localStorage.getItem("zijiatitle") == "长租服务" ? "date" : "datetime"
+					var picker = new $.DtPicker({
+						type: dateType,
+						beginYear: nowYear,
+						endYear: endYear,
+						value: btn.innerText
+					});
+					//						picker.show.value = 
+					//						alert(picker.value)
+					picker.show(function(rs) {
+						/*
+						 * rs.value 拼合后的 value
+						 * rs.text 拼合后的 text
+						 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+						 * rs.m 月，用法同年
+						 * rs.d 日，用法同年 
+						 * rs.h 时，用法同年
+						 * rs.i 分（minutes 的第二个字母），用法同年
+						 */
+						//							rs.text = btn.innerText
+						btn.innerText = rs.text;
+						document.getElementById("daysvalue").innerHTML = setdetailDate(quchetime1.innerHTML.replace(" ", "T"), huanchetime1.innerHTML.replace(" ", "T"))
+						picker.dispose();
+					});
+				}, false);
+			});
+		})(mui);
+		$(document).ready(function() {
+
+			//初始化时间控件
+			var now = new Date();
+
+			var nowYear = now.getFullYear(); //年
+			var nowMonth = now.getMonth() + 1 < 10 ? "0" + (now.getMonth() + 1) : now.getMonth(); //月
+			var nowDay = now.getDate() < 10 ? "0" + now.getDate() : now.getDate(); //日期
+			//			var nextYear = now.getFullYear();
+			//			var nextMonth = now.getMonth() + 1;
+			//			var nextDay = now.getDate() + 2;
+			//
+			////			console.log("=====" + now22)
+			////			console.log("=====" + times)
+			//			if ((nowYear % 4 == 0 && nowYear % 100 != 0) || nowYear % 400 == 0) {
+			//				switch (now.getMonth() + 1) {
+			//					case 1, 3, 5, 7, 8, 10:
+			//						if (nextDay > 31) {
+			//							nextDay -= 31;
+			//							nextMonth = now.getMonth() + 2;
+			//							nextYear = nowYear;
+			//						} else {
+			//							nextMonth = now.getMonth() + 1;
+			//							nextYear = nowYear;
+			//						}
+			//						break;
+			//					case 2:
+			//						if (nextDay > 29) {
+			//							nextDay -= 29;
+			//							nextMonth = now.getMonth() + 2;
+			//							nextYear = nowYear;
+			//						} else {
+			//							nextMonth = now.getMonth() + 1;
+			//							nextYear = nowYear;
+			//						}
+			//						break;
+			//					case 4, 6, 9, 11:
+			//						if (nextDay > 30) {
+			//							nextDay -= 30;
+			//							nextMonth = now.getMonth() + 2;
+			//							nextYear = nowYear;
+			//						} else {
+			//							nextMonth = now.getMonth() + 1;
+			//							nextYear = nowYear;
+			//						}
+			//						break;
+			//					case 12:
+			//						if (nextDay > 31) {
+			//							nextDay -= 31;
+			//							nextMonth = 1;
+			//							nextYear = nowYear + 1;
+			//						} else {
+			//							nextMonth = now.getMonth() + 1;
+			//							nextYear = nowYear;
+			//						}
+			//						break;
+			//				}
+			//			} else {
+			//				switch (now.getMonth() + 1) {
+			//					case 1, 3, 5, 7, 8, 10:
+			//						if (nextDay > 31) {
+			//							nextDay -= 31;
+			//							nextMonth = now.getMonth() + 2;
+			//							nextYear = nowYear;
+			//						} else {
+			//							nextMonth = now.getMonth() + 1;
+			//							nextYear = nowYear;
+			//						}
+			//						break;
+			//					case 2:
+			//						if (nextDay > 28) {
+			//							nextDay -= 28;
+			//							nextMonth = now.getMonth() + 2;
+			//							nextYear = nowYear;
+			//						} else {
+			//							nextMonth = now.getMonth() + 1;
+			//							nextYear = nowYear;
+			//						}
+			//						break;
+			//					case 4, 6, 9, 11:
+			//						if (nextDay > 30) {
+			//							nextDay -= 30;
+			//							nextMonth = now.getMonth() + 2;
+			//							nextYear = nowYear;
+			//						} else {
+			//							nextMonth = now.getMonth() + 1;
+			//							nextYear = nowYear;
+			//						}
+			//						break;
+			//					case 12:
+			//						if (nextDay > 31) {
+			//							nextDay -= 31;
+			//							nextMonth = 1;
+			//							nextYear = nowYear + 1;
+			//						} else {
+			//							nextMonth = now.getMonth() + 1;
+			//							nextYear = nowYear;
+			//						}
+			//						break;
+			//				}
+			//			}
+			//			nextDay = nextDay < 10 ? "0" + nextDay : nextDay;
+			//			nextMonth = nextMonth < 10 ? "0" + nextMonth : nextMonth;
+			var nowHour = now.getHours() < 9 ? "0" + (now.getHours() + 1) : now.getHours() + 1; //时
+			//			var nextHour = now.getHours() < 8 ? "0" + (now.getHours() + 3) : now.getHours() + 3;
+			var nowMinute = now.getMinutes() < 10 ? "0" + now.getMinutes() : now.getMinutes(); //分
+		
+			if (document.getElementById("openPopover").text == "短租自驾") {
+//				
+				quchetime1.innerHTML = afterNowDay(1,"hour");
+				huanchetime1.innerHTML = afterNowDay(3,"hour");
+			} else {
+				
+				quchetime1.innerHTML = afterNowDay(1,"day")
+				huanchetime1.innerHTML = afterNowDay(3,"day")
+			}
+
+			document.getElementById("daysvalue").innerHTML = setdetailDate(quchetime1.innerHTML.replace(" ", "T"), huanchetime1.innerHTML.replace(" ", "T"))
+		});
+	</script>
+
+</html>

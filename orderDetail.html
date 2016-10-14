@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/time.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			body {
+				font-size: 90%;
+				color: #777;
+				height: 0px;
+				padding: 0px;
+				background-color: #efeff4;
+			}
+			
+			.mui-content {
+				margin-left: 10px;
+				margin-top: 10px;
+				margin-right: 10px;
+			}
+			
+			.piece {
+				border: solid 1px #8F8F94;
+			}
+			
+			#orderlist-main {
+				visibility: hidden;
+			}
+			
+			#order {
+				border: 1px solid #8F8F94;
+				overflow: hidden;
+				zoom: 1;
+			}
+			
+			#order div {
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			
+			#order_head div {
+				margin-top: 10px;
+				margin-bottom: 10px;
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			
+			#feiyong div,
+			#costCont div {
+				margin: 10px;
+			}
+			
+			#order1 {
+				line-height: 40px;
+				height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			#order1 span+span {
+				float: right;
+			}
+			
+			#order2 {
+				line-height: 40px;
+				height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			#vehicleAttr {
+				float: left;
+			}
+			
+			#vehicleType {
+				float: right;
+			}
+			
+			#order3 {
+				border-bottom: 1px solid #8F8F94;
+				overflow: hidden;
+			}
+			
+			#order3 div {
+				float: left;
+			}
+			
+			#takeTime {
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+			
+			#returnTime {
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+			
+			#days {
+				margin-top: 30px;
+			}
+			
+			#order4,
+			#order5 {
+				margin-bottom: 10px;
+			}
+			
+			#order4 {
+				height: 40px;
+				line-height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			#status {
+				text-align: center;
+				color: #008000;
+				font-size: 20px;
+			}
+			
+			#papers {
+				font-size: 18px;
+			}
+			
+			.mui-btn {
+				width: 48%;
+			}
+			
+			#cancel {
+				float: left;
+			}
+			
+			#update {
+				float: right;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="orderList.html"></a>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			
+			<h1 class="mui-title">订单详情</h1>
+		</header>-->
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="orderList.html"></a>
+			<h1 class="mui-title">订单详情</h1>
+		</header>
+		<div class="mui-content">
+			<div id="order_head" class="piece">
+				<div id="status">
+					订单状态
+				</div>
+				<div id="papers">
+					取车证件 : 身份证+驾驶证
+				</div>
+
+			</div><br />
+			<div id="order">
+				<div id="order1">
+					订单号:
+					<span id="orderID">
+							</span>
+
+				</div>
+
+				<div id="order2">
+					<span id="vehicleAttr">
+								
+							</span>
+					<span id="vehicleType">
+								车型
+							</span>
+				</div>
+
+				<div id="order3">
+					<div id="takeTime">
+						取车时间:
+					</div>
+					<div id="days">
+						2天
+					</div>
+					<div id="returnTime">
+						还车时间:
+					</div>
+
+				</div>
+
+				<div id="order4">
+					<span id="takeStore">
+								取车门店
+							</span>
+				</div>
+
+				<div id="order5">
+					<span id="returnStore">
+								还车门店
+							</span>
+				</div>
+			</div><br />
+			<div id="cost1">
+
+				<span id="budget">
+				预估费用
+			</span>
+				<div id="feiyong" class="piece">
+					<div id="feiyong1">
+						车辆租赁费 :
+					</div>
+					<div id="feiyong2">
+						不计免赔
+					</div>
+					<div id="feiyong4">
+						费用合计
+					</div>
+				</div><br />
+			</div>
+
+			<div id="cost2">
+				<span id="budget">
+				费用明细
+			</span>
+				<div id="costCont" class="piece">
+					<div id="costInfo1">
+						车辆租赁费:
+					</div>
+					<div id="costInfo2">
+						优惠金额:
+					</div>
+					<div id="costInfo3">
+						不计免赔:
+					</div>
+					<div id="costInfo4">
+						维修费:
+					</div>
+					<div id="costInfo5">
+						违章费:
+					</div>
+					<div id="costInfo6">
+						违章代办费:
+					</div>
+					<div id="costInfo10">
+						异地还车费:
+					</div>
+					<div id="costInfo11">
+						同城不同点还车费:
+					</div>
+					<div id="costInfo12">
+						基本保险费:
+					</div>
+					<div id="costInfo13">
+						服务费:
+					</div>
+					<div id="costInfo7">
+						增加金额:
+					</div>
+					<div id="costInfo8">
+						减免金额:
+					</div>
+					<div id="costInfo9">
+						合计:
+					</div>
+				</div><br />
+			</div>
+
+			<button id="cancel" type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="tuiding()">取消订单</button>
+			<button id="update" type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="xiugaidingdan()">修改订单</button>
+
+			<br /><br />
+		</div>
+		<script type="text/javascript">
+			var orderID = localStorage.getItem('orderId');
+			var orderDoc = localStorage.getItem('order');
+
+			var myCancel = document.getElementById('cancel'); //取消
+			var myUpdate = document.getElementById('update'); //修改
+
+			var cost1 = document.getElementById("cost1"); //预估费用
+			var cost2 = document.getElementById("cost2"); //费用明细
+
+			var order = JSON.parse(orderDoc);
+			var orderId = localStorage.getItem('orderId');
+			getCostInfo(orderId);
+			getCost(orderId); //获取订单详细信息
+			function getCostInfo(e) {
+
+				var myUrl = HEAD + BODY + GET_INSURE_COST;
+				var myData = {
+					argOrderId: e
+				};
+
+				netRequest(myUrl, myData);
+			}
+
+			function getCost(id) {
+				var myUrl = HEAD + BODY + GET_CONSUME_HISTORY;
+				var myData = {
+					argOrderID: id
+				}
+
+				netRequest(myUrl, myData);
+			}
+
+			netNowDate()
+			var nowTimeStr;
+
+			function nowTime(e) {
+				nowTimeStr = e;
+			}
+
+			function getdata(data, myUrl) {
+
+				if (myUrl == HEAD + "/lease/WebService1.asmx/GetExcludingDeductibleInfoByOrderId") {
+					if (data.Result == 0) {
+						deductible = 0;
+					} else {
+						deductible = data.Table[0].DeductibleAmount;
+
+					}
+					setHTML(order);
+
+				}
+				if (myUrl == HEAD + "/Lease/WebService1.asmx/IsAllowedCancelReservationApplyForApp") {
+					//		alert(myUrl)
+					if (data.Result == 1) {
+						if (data.Table[0].IsAllowed == 1) {
+
+							CancelReservationApplyForApp(orderid.innerHTML, nowTimeStr);
+						} else {
+							alert("对不起您的订单暂时不能退，如有需要，请与客服联系");
+						}
+					}
+				}
+				if (myUrl == HEAD + "/lease/WebService1.asmx/CancelReservationApplyForApp") {
+					if (data.Result == 1) {
+						if (data.Table[0].status == 1) {
+							myCancel.disabled = true;
+							mui.toast("退订成功")
+						} else {
+							myCancel.disabled = true;
+							mui.toast("退订失败")
+						}
+					}
+				}
+				if (myUrl == HEAD + BODY + GET_CONSUME_HISTORY) {
+
+					if (0 == data.Result) {
+						cost1.style.display = 'block';
+						cost2.style.display = 'none';
+						return
+					} else {
+
+						//总费用=【订单优惠后的费用(最小值取0)】(订单费用-优惠券优惠金额)+【超时费用】(每小时租金+5)*超时小时数*150%-会员等级优惠金额+【不计免赔费用(封顶每天30元)】+【维修费用】+【违章费用】+【违章代办费】-【减免金额】+【增加金额】
+						var dataInfo = data.Table[0];
+						var budget = document.getElementById("budget");
+						console.log(JSON.stringify(dataInfo));
+						var VehicleLeaseAmt = dataInfo.VehicleLeaseAmt; //租赁费用
+						var CouponDiscount = dataInfo.CouponDiscount; //优惠金额
+						var DeductibleAmount = dataInfo.DeductibleAmount; //不计免赔
+						var MaintenanceCost = dataInfo.MaintenanceCost; //维修费
+						var ViolationAmt = dataInfo.ViolationAmt; //违章费
+						var CommissionCost = dataInfo.CommissionCost; //违章代办费
+						var IncreasedAmountManually = dataInfo.IncreasedAmountManually; //增加金额
+						var DecreasedAmountManually = dataInfo.DecreasedAmountManually; //减免金额
+						var DifferentCitiesCost = dataInfo.DifferentCitiesCost; //异地还车费
+						var DifferentAreasOfTheCityCost = dataInfo.DifferentAreasOfTheCityCost; //同城不同点还车费
+						var BasicInsurancePremium = dataInfo.BasicInsurancePremium; //基本保险费
+						var ServiceCharge = dataInfo.ServiceCharge; //服务费
+
+						var total = parseFloat(VehicleLeaseAmt) - parseFloat(CouponDiscount) + parseFloat(DeductibleAmount) + parseFloat(MaintenanceCost) + parseFloat(ViolationAmt) + parseFloat(CommissionCost) + parseFloat(IncreasedAmountManually) - parseFloat(DecreasedAmountManually) + parseFloat(DifferentCitiesCost) + parseFloat(DifferentAreasOfTheCityCost) + parseFloat(BasicInsurancePremium) + parseFloat(ServiceCharge);
+						if (0.00 == total) {
+							cost1.style.display = 'block';
+							cost2.style.display = 'none';
+							return
+						}
+						cost1.style.display = 'none';
+						cost2.style.display = 'block';
+
+						var costInfo1 = document.getElementById("costInfo1");
+						var costInfo2 = document.getElementById("costInfo2");
+						var costInfo3 = document.getElementById("costInfo3");
+						var costInfo4 = document.getElementById("costInfo4");
+						var costInfo5 = document.getElementById("costInfo5");
+						var costInfo6 = document.getElementById("costInfo6");
+						var costInfo7 = document.getElementById("costInfo7");
+						var costInfo8 = document.getElementById("costInfo8");
+						var costInfo9 = document.getElementById("costInfo9");
+						var costInfo10 = document.getElementById("costInfo10"); //异地还车费
+						var costInfo11 = document.getElementById("costInfo11"); //同城不同点还车费
+						var costInfo12 = document.getElementById("costInfo12"); //基本保险费
+						var costInfo13 = document.getElementById("costInfo13"); //服务费
+
+						costInfo1.style.display = VehicleLeaseAmt != 0.00 ? "block" : "none";
+						costInfo2.style.display = CouponDiscount != 0.00 ? "block" : "none";
+						costInfo3.style.display = DeductibleAmount != 0.00 ? "block" : "none";
+						costInfo4.style.display = MaintenanceCost != 0.00 ? "block" : "none";
+						costInfo5.style.display = ViolationAmt != 0.00 ? "block" : "none";
+						costInfo6.style.display = CommissionCost != 0.00 ? "block" : "none";
+						costInfo7.style.display = IncreasedAmountManually != 0.00 ? "block" : "none";
+						costInfo8.style.display = DecreasedAmountManually != 0.00 ? "block" : "none";
+						costInfo10.style.display = DifferentCitiesCost != 0.00 ? "block" : "none";
+						costInfo11.style.display = DifferentAreasOfTheCityCost != 0.00 ? "block" : "none";
+						costInfo12.style.display = BasicInsurancePremium != 0.00 ? "block" : "none";
+						costInfo13.style.display = ServiceCharge != 0.00 ? "block" : "none";
+
+						costInfo9.style.display = total ? "block" : "none";
+
+						costInfo1.innerHTML = "车辆租赁费 : " + VehicleLeaseAmt;
+						costInfo2.innerHTML = "优惠金额 : -" + CouponDiscount;
+						costInfo3.innerHTML = "不计免赔 : " + DeductibleAmount;
+						costInfo4.innerHTML = "维修费 : " + MaintenanceCost;
+						costInfo5.innerHTML = "违章费 : " + ViolationAmt;
+						costInfo6.innerHTML = "违章代办费 : " + CommissionCost;
+						costInfo7.innerHTML = "增加金额 : " + IncreasedAmountManually;
+						costInfo8.innerHTML = "减免金额 : -" + DecreasedAmountManually;
+						costInfo10.innerHTML = "异地还车费 : " + DifferentCitiesCost;
+						costInfo11.innerHTML = "同城不同点还车费 : " + DifferentAreasOfTheCityCost;
+						costInfo12.innerHTML = "基本保险费 : " + BasicInsurancePremium;
+						costInfo13.innerHTML = "服务费 : " + ServiceCharge;
+
+						costInfo9.innerHTML = "费用合计 : " + total;
+
+					}
+
+				}
+
+			}
+			var orderid = document.getElementById('orderID');
+			var vehicleAttr = document.getElementById('vehicleAttr');
+			var vehicleType = document.getElementById('vehicleType');
+			var takeTime = document.getElementById('takeTime');
+			var retrunTime = document.getElementById('returnTime');
+			var days = document.getElementById('days');
+			var takeStore = document.getElementById('takeStore');
+			var returnStore = document.getElementById('returnStore');
+			var feiyong1 = document.getElementById('feiyong1');
+			var feiyong2 = document.getElementById('feiyong2');
+			var feiyong3 = document.getElementById('feiyong3');
+			var feiyong4 = document.getElementById('feiyong4');
+
+			function setHTML(data) {
+
+				var status = document.getElementById('status');
+				var realTakeTime = data.RealTakeTime ? data.RealTakeTime : data.ExpectTakeTime;
+				var realReturnTime = data.RealReturnTime ? data.RealReturnTime : (data.RenewReturnTime ? data.RenewReturnTime : data.ExpectReturnTime);
+				status.innerHTML = setStatus(parseInt(data.Status), data.IsSettlement);
+
+				orderid.innerHTML = data.OrderID;
+				vehicleAttr.innerHTML = "车牌 : " + data.VehicleNo;
+				vehicleType.innerHTML = "车型 : " + data.vehicleTypeName;
+				takeTime.innerHTML = realTakeTime;
+				returnTime.innerHTML = realReturnTime;
+				//				days.innerHTML = setDate(data.ExpectTakeTime, data.RenewReturnTime ? data.RenewReturnTime : data.ExpectReturnTime);
+				days.innerHTML = setDate(realTakeTime, realReturnTime);
+				takeStore.innerHTML = "取车门店 : " + data.TakeCarNetworkName;
+				data.RealReturnCarNetworkName.length > 0 ? returnStore.innerHTML = "还车门店 : " + data.RealReturnCarNetworkName : returnStore.innerHTML = "还车门店 : " + data.ExpectReturnCarNetworkName;
+				localStorage.setItem("orderId", data.OrderID);
+				localStorage.setItem("ExpectReturnCarNetworkName", data.ExpectReturnCarNetworkName);
+				localStorage.setItem("ExpectReturnCarNetworkID", data.ExpectReturnCarNetworkID);
+				//				alert(deductible)
+				//				alert(data.RenewCosts==0? data.EstimatedCosts : data.RenewCosts)
+				feiyong1.innerHTML = "车辆租金 : " + (data.RenewCosts == 0 ? data.EstimatedCosts : data.RenewCosts);
+				feiyong2.innerHTML = "不计免赔金额 : " + deductible;
+				feiyong4.innerHTML = "费用合计 : " + (parseFloat(deductible) + parseFloat(data.RenewCosts == 0 ? data.EstimatedCosts : data.RenewCosts));
+			}
+
+			function setDate(stime, etime) {
+				var mdate = (new Date(etime) - new Date(stime)) / 1000;
+				var day = parseInt(mdate / 3600 / 24);
+				var hour = parseInt((mdate - day * 24 * 3600) / 3600);
+				var minute = parseInt((mdate - day * 24 * 3600 - hour * 3600) / 60);
+				return day + "天" + hour + "时" + minute + "分";
+			}
+
+			function setStatus(e, f) {
+				switch (e) {
+					case 1:
+						myCancel.style.display = "block";
+						myUpdate.style.display = "block";
+						return "预定中";
+					case 2:
+						myCancel.style.display = "none";
+						myUpdate.style.display = "block";
+						return "已取车";
+					case 3:
+						myCancel.style.display = "none";
+						myUpdate.style.display = "none";
+						return "已还车";
+					case 4:
+						myCancel.style.display = "none";
+						myUpdate.style.display = "none";
+						if (1 == f || 0 == f) {
+							return "已挂起"
+						} else {
+							return "已退订"
+						}
+
+					case 5:
+						myCancel.style.display = "block";
+						myUpdate.style.display = "block";
+						return "未通过审核";
+					case 6:
+						myCancel.style.display = "block";
+						myUpdate.style.display = "block";
+						return "预定成功";
+					case 7:
+						myCancel.style.display = "block";
+						myUpdate.style.display = "block";
+						return "变更车辆";
+					case 10:
+						myCancel.style.display = "none";
+						myUpdate.style.display = "none";
+						return "超时还车";
+					case 11:
+						myCancel.style.display = "none";
+						myUpdate.style.display = "block";
+						return "正常未还车";
+					case 12:
+						myCancel.style.display = "none";
+						myUpdate.style.display = "block";
+						return "超时未还车";
+					case 13:
+						myCancel.style.display = "block";
+						myUpdate.style.display = "block";
+						return "正常未取车";
+					case 14:
+						myCancel.style.display = "block";
+						myUpdate.style.display = "block";
+						return "超时未取车";
+					case 15:
+						myCancel.style.display = "none";
+						myUpdate.style.display = "block";
+						return "续订";
+					case 16:
+						myCancel.style.display = "none";
+						myUpdate.style.display = "none";
+						return "取消订单";
+					default:
+						myCancel.style.display = "none";
+						myUpdate.style.display = "none";
+						return "状态未知";
+				}
+			}
+		</script>
+
+		<script>
+			function tuiding() {
+				var currentdate = nowDate();
+				IsAllowedCancelReservationApplyForApp(orderid.innerHTML);
+				//				CancelReservation(orderid.innerHTML, currentdate)
+			}
+
+			function xiugaidingdan() {
+				//				alert(returnTime.innerHTML);
+				localStorage.setItem("detailreturnTime", returnTime.innerHTML);
+				clicked("xuding/xudingdetail.html", true, false);
+			}
+		</script>
+	</body>
+
+</html>

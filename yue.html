@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			#head {
+				height: 200px;
+				background-color: dodgerblue;
+			}
+			
+			#text {
+				padding: 10px;
+				color: white;
+			}
+			
+			#value {
+				padding-top: 70px;
+				padding-left: 20px;
+				font-size: 80px;
+				color: white;
+			}
+			
+			#chongzhi,
+			#tixian,
+			#tixianjilu {
+				padding-left: 30px;
+				line-height: 50px;
+				height: 50px;
+				background-color: white;
+				border-bottom: 1px solid #C7C7CC;
+			}
+			
+			#tixianjilu {
+				border-top: 1px solid #C7C7CC;
+			}
+			
+			.right {
+				height: 10px;
+				margin-top: 20px;
+				padding-right: 15px;
+				float: right;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="wode.html"></a>
+			<h1 class="mui-title">账户余额</h1>
+		</header>
+		<div class="mui-content">
+			<div id="head">
+				<div id="text">
+					账户余额(元)
+				</div>
+				<div id="value">
+					0.00
+				</div>
+			</div>
+			<div id="middle">
+				<div id="chongzhi">
+					充值
+					<img src="images/right.png" class="right" />
+					<!--<a href="#picture"></a>-->
+				</div>
+				<div id="tixian">
+					提现
+					<img src="images/right.png" class="right" />
+				</div>
+				<br />
+				<div id="tixianjilu">
+					提现记录
+					<img src="images/right.png" class="right" />
+				</div>
+			</div>
+
+			<div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a id="alipay" onclick="zhifubaoClick(this)">支付宝支付</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a id="wxpay" onclick="weixinClick(this)">微信支付</a>
+					</li>
+					<!--<li class="mui-table-view-cell">
+						<a onclick="yinlianClick()">银联支付</a>
+					</li>-->
+				</ul>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<a href="#picture"><b>取消</b></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<script type="text/javascript">
+			//			document.getElementById("tixianjilu").style.display="none";
+
+			var info = JSON.parse(localStorage.getItem('info'));
+			var balance = "";
+			if (info.OrganizationID) {
+				document.getElementById("tixian").style.display = "none";
+				document.getElementById("chongzhi").style.display = "none";
+			}
+
+				getMemberMoney(info.LoginName);
+				reLogin(info.LoginName, info.Password);
+
+
+			function reLogin(username, psd) {
+				var myUrl = HEAD + BODY + LOGIN;
+				var myData = {
+					loginName: username,
+					passWord: psd,
+					checkType: 1,
+					argLeaseType: 2
+				};
+				netRequest(myUrl, myData);
+			}
+
+			function getMemberMoney(loginName) {
+				var myUrl = HEAD + BODY_MONEY + GET_MEMORY_MONEY;
+				var myData = {
+					argLoginName: loginName
+				};
+
+				netRequest(myUrl, myData);
+			}
+
+			function getdata(data, tUrl) {
+
+				if (tUrl == HEAD + BODY_MONEY + GET_MEMORY_MONEY) {
+					if (data.Result == 1) {
+
+						balance = data.Table[0].Balance;
+						localStorage.setItem("balance", balance);
+						document.getElementById('value').innerHTML = balance;
+					} else {
+
+						//					alert("操作失败");
+					}
+				}
+				if (tUrl == HEAD + BODY + LOGIN) {
+					var info = JSON.stringify(data.Table[0]);
+
+					localStorage.setItem('info', info);
+					info = localStorage.getItem('info');
+				}
+
+			}
+			document.getElementById('chongzhi').onclick = function() {
+				if (1 == info.Status) {
+					mui('#picture').popover('toggle', document.getElementById("chongzhi"));
+				} else {
+					alert("请先联系客服审核您的账号");
+				}
+
+			}
+			document.getElementById('tixian').onclick = function() {
+				if (parseFloat(info.Balance) > 0.00) {
+					window.location.href = "tixian.html";
+				} else {
+					alert("余额不足,不能提现");
+				}
+			}
+			document.getElementById("tixianjilu").onclick = function() {
+				window.location.href = "tixianjilu.html";
+			}
+		</script>
+		<script language="javascript" src="http://www.codefans.net/ajaxjs/jquery1.3.2.js"></script>
+
+		<script language="javascript">
+			var ip;
+			jQuery(function($) {
+				var url = 'http://chaxun.1616.net/s.php?type=ip&output=json&callback=?&_=' + Math.random();
+				$.getJSON(url, function(data) {
+					ip = data.Ip;
+				});
+			});
+		</script>
+		<script type="text/javascript">
+			var pays = {};
+			// 1. 获取支付通道 
+			function plusReady() {
+				// 获取支付通道
+				plus.payment.getChannels(function(channels) {
+					for (var i in channels) {
+						var channel = channels[i];
+						pays[channel.id] = channel;
+						//						console.log(JSON.stringify(channel));
+						checkServices(channel);
+					}
+					//      channel=channels[0];
+				}, function(e) {
+					alert("获取支付通道失败：" + e.message);
+				});
+			}
+			document.addEventListener('plusready', plusReady, false);
+			// 检测是否安装支付服务
+			function checkServices(pc) {
+				if (!pc.serviceReady) {
+					var txt = null;
+					switch (pc.id) {
+						case "alipay":
+							txt = "检测到系统未安装“支付宝快捷支付服务”，无法完成支付操作，是否立即安装？";
+							break;
+						default:
+							txt = "系统未安装“" + pc.description + "”服务，无法完成支付，是否立即安装？";
+							break;
+					}
+					//					plus.nativeUI.confirm(txt, function(e) {
+					//						if (e.index == 0) {
+					//							pc.installService();
+					//						}
+					//					}, pc.description);
+				}
+			}
+		</script>
+		<script>
+			var URL = 'http://111.175.187.206:6001/LeasePaymentService/api'
+			var url = URL + "/payment";
+			var str1;
+
+			function zhifubaoClick(e) {
+				var id = e.id;
+				var btnArray = ['取消', '确定'];
+				mui.prompt('充值：', '单位/元', '支付宝', btnArray, function(e) {
+
+					if (e.index == 1) {
+						if (isNaN(e.value)) {
+							alert("请输入合法数字")
+							return;
+						}
+
+						if (id == 'alipay') {
+							var str = {
+								"loginName": localStorage.getItem("username"),
+								"txnAmt": e.value,
+								"spbill_create_ip": "192.168.1.223",
+								"paymentType": 3,
+								"oprationType": 1
+							};
+
+							str1 = JSON.stringify(str);
+						}
+						var xhr = new XMLHttpRequest();
+
+						xhr.onreadystatechange = function() {
+
+							switch (xhr.readyState) {
+								case 4:
+									if (xhr.status == 200) {
+
+										plus.payment.request(pays[id], xhr.responseText, function(result) {
+											plus.nativeUI.alert("支付成功！", function() {
+												window.location.reload();
+											});
+										}, function(error) {
+											for (var c in error) {
+												//												console.log(c);
+
+											}
+											plus.nativeUI.alert("支付失败：" + error.message);
+
+										});
+									} else {
+										alert(xhr.status);
+										alert("获取信息失败！");
+									}
+									break;
+								default:
+									break;
+							}
+						}
+						xhr.open('POST', url);
+						xhr.setRequestHeader("Content-Type", "application/json");
+						xhr.send(str1);
+					}
+				})
+			}
+
+			function weixinClick(e) {
+				var id = e.id
+				var btnArray = ['取消', '确定'];
+				mui.prompt('充值：', '单位/元', '微信', btnArray, function(e) {
+					if (e.index == 1) {
+						if (isNaN(e.value)) {
+							alert("请输入合法数字")
+							return;
+						}
+						var str = {
+							"loginName": localStorage.getItem("username"),
+							"txnAmt": e.value,
+							"spbill_create_ip": ip,
+							"paymentType": 2,
+							"oprationType": 1
+						}
+						str1 = JSON.stringify(str);
+						mui.ajax({
+							data: str1,
+							dataType: 'text/xml', //服务器返回json格式数据
+							url: 'http://111.175.187.206:6001/LeasePaymentService/api/payment',
+							type: 'post', //HTTP请求类型
+							timeout: 10000,
+							contentType: 'application/json',
+							success: function(data) {
+								var data1 = JSON.parse(data);
+
+								plus.payment.request(pays[id], data, function(result) {
+									//							alert(JSON.stringify(result));
+									alert("付费成功");
+									window.location.reload();
+								}, function(e) {
+									//							alert(JSON.stringify(e));
+									alert("付费失败");
+								});
+							},
+							error: function(xhr, type, errorThrown) {
+								//异常处理；
+
+								mui.toast(errorThrown);
+
+							}
+						});
+					}
+				})
+
+			}
+		</script>
+	</body>
+
+</html>

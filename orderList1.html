@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/jquery-1.11.1.min.js" type="text/javascript" charset="UTF-8"></script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			html,
+			body,
+			.mui-content {
+				font-size: 92%;
+				color: #777;
+				height: 0px;
+				margin: 0px;
+				background-color: #efeff4;
+			}
+			
+			* {
+				-webkit-touch-callout: none;
+				-webkit-user-select: none;
+			}
+			
+			#orderlist-main {
+				visibility: hidden;
+			}
+			
+			.order {
+				border: 1px solid #8F8F94;
+				overflow: hidden;
+				zoom: 1;
+			}
+			
+			.order div {
+				margin-left: 10px;
+				margin-right: 10px;
+			}
+			
+			.order1 {
+				line-height: 40px;
+				height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			.order1 span + span {
+				float: right;
+			}
+			
+			.order2 {
+				line-height: 40px;
+				height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			.vehicleAttr {
+				float: left;
+			}
+			
+			.vehicleType {
+				float: right;
+			}
+			
+			.order3 {
+				border-bottom: 1px solid #8F8F94;
+				overflow: hidden;
+			}
+			
+			.order3 div {
+				float: left;
+			}
+			
+			.takeTime {
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+			
+			.returnTime {
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+			
+			.days {
+				margin-top: 30px;
+			}
+			
+			.order4,
+			.order5 {
+				margin-bottom: 10px;
+			}
+			
+			.order4 {
+				height: 40px;
+				line-height: 40px;
+				border-bottom: 1px solid #8F8F94;
+			}
+			
+			@keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-webkit-keyframes rotate {
+				from {
+					-webkit-transform: rotate(0deg)
+				}
+				to {
+					-webkit-transform: rotate(360deg)
+				}
+			}
+			
+			@-moz-keyframes rotate {
+				from {
+					-moz-transform: rotate(0deg)
+				}
+				to {
+					-moz-transform: rotate(360deg)
+				}
+			}
+			
+			@-ms-keyframes rotate {
+				from {
+					-ms-transform: rotate(0deg)
+				}
+				to {
+					-ms-transform: rotate(360deg)
+				}
+			}
+			
+			@-o-keyframes rotate {
+				from {
+					-o-transform: rotate(0deg)
+				}
+				to {
+					-o-transform: rotate(360deg)
+				}
+			}
+			
+			img {
+				animation: 9.5s linear 0s normal none infinite rotate;
+				-webkit-animation: 0.8s linear 0s normal none infinite rotate;
+				height: 50px;
+				width: 50px;
+				border-radius: 50%;
+			}
+			
+			#popu {
+				display: none;
+				background-color: #4CD964;
+			}
+			
+			.p {
+				padding-left: 10px;
+				padding-top: 7px;
+				padding-bottom: 7px;
+				border-bottom: 1px #aaa solid;
+			}
+		</style>
+		<script>
+			var st = new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 30 * 12 * 5);
+			var et = new Date();
+			var stime = st.getFullYear() + "/" + st.getMonth() + "/" + st.getDate() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds();
+			var etime = et.getFullYear() + 5 + "/" + (et.getMonth() + 1) + "/" + et.getDate() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds();
+			getOrderList(localStorage.getItem('username'), stime, etime);
+
+			function getOrderList(username, takeTime, returnTime) {
+				var myUrl = HEAD + BODY + ORDER_LIST;
+				var myData = {
+					argLoginName: username,
+					argTakeTime: takeTime,
+					argReturnTime: returnTime
+				};
+				netRequest(myUrl, myData);
+			}
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="wode.html"></a>
+			<h1 id="title" class="mui-title">全部订单</h1>
+		</header>
+
+		<div class="mui-content">
+			<div id="popu">
+				<div id="item1" class="p">
+					全部订单
+				</div>
+				<div id="item2" class="p">
+					预定成功
+				</div>
+				<div id="item3" class="p">
+					已取消
+				</div>
+				<div id="item4" class="p">
+					未取车
+				</div>
+				<div id="item5" class="p">
+					已取车
+				</div>
+				<div id="item6" class="p">
+					未还车
+				</div>
+				<div id="item7" class="p">
+					已完成
+				</div>
+			</div>
+
+			<div class="mui-content-padded">
+
+				<div align="center" id="loading">
+					<img src="images/loading_throbber.png" />
+				</div>
+
+				<div id="orderlist-main">
+
+				</div>
+
+			</div>
+		</div>
+
+		<script type="text/javascript">
+			var orderArray;
+			var loading = document.getElementById('loading');
+			var main = document.getElementById('orderlist-main');
+			var title = document.getElementById('title');
+			var popu = document.getElementById('popu')
+
+			title.onclick = function() {
+
+				popu.style.display='block';
+
+			}
+
+			ontouchmove
+
+			function getdata(data) {
+				if (data.Result == 1) {
+					orderArray = data.Table;
+
+
+					//					setHtml(main,orderArray);
+					clickItem1();
+				} else {
+					main.innerHTML = "您还没有生成订单"
+					loading.style.height = "0px";
+					loading.style.visibility = "hidden";
+					main.style.visibility = "visible";
+				}
+			}
+
+			function setHtml(list, doc) {
+
+				if (list.length > 0) {
+					var html = "";
+					for (var i = 0; i < list.length; i++) {
+						var returnTime = list[i].RenewReturnTime ? list[i].RenewReturnTime : list[i].ExpectReturnTime;
+						var returnNetWord = list[i].RealReturnCarNetworkName ? list[i].RealReturnCarNetworkName : list[i].ExpectReturnCarNetworkName;
+						html += '<div class="order" onclick="orderStore(' + i + ')"><div class="order1">订单号:<span class="orderID">' + list[i].OrderID + '</span><span class="orderStatus">' + setStatus(parseInt(list[i].Status)) + '</span></div><div class="order2"><span class="vehicleAttr">车牌: ' + list[i].VehicleNo + '</span><span class="vehicleType">车型: ' + list[i].vehicleTypeName + '</span></div><div class="order3"><div class="takeTime">取车时间: ' + list[i].ExpectTakeTime + '</div><div class="days">时长: ' + setDate(list[i].ExpectTakeTime, returnTime) + '</div><div class="returnTime">还车时间: ' + returnTime + '</div></div><div class="order4"><span class="takeStore">取车门店: ' + list[i].TakeCarNetworkName + '</span></div><div class="order5"><span class="returnStore">还车门店: ' + returnNetWord + '</span></div></div><br/>';
+					}
+					loading.style.height = "0px";
+					loading.style.visibility = "hidden";
+					main.innerHTML = html;
+					main.style.visibility = "visible";
+				} else {
+					loading.style.height = "0px";
+					loading.style.visibility = "hidden";
+					main.innerHTML = doc;
+					main.style.visibility = "visible";
+				}
+
+			}
+
+			function setStatus(e) {
+				switch (e) {
+					case 1:
+						return "已预定";
+					case 2:
+						return "已取车";
+					case 3:
+						return "已还车";
+					case 4:
+						return "已退订";
+					case 5:
+						return "未通过审核";
+					case 6:
+						return "已预订";//通过审核
+					case 7:
+						return "变更车辆";
+					case 10:
+						return "超时还车";
+					case 11:
+						return "正常未还车";
+					case 12:
+						return "超时未还车";
+					case 13:
+						return "正常未取车";
+					case 14:
+						return "超时未取车";
+					case 15:
+						return "续订";
+					case 16:
+						return "取消订单";
+					default:
+						return "状态未知";
+				}
+			}
+
+			function clickTitle() {
+
+			}
+
+			function setDate(stime, etime) {
+				var mdate = (new Date(etime) - new Date(stime)) / 1000;
+				var day = parseInt(mdate / 3600 / 24);
+				var hour = parseInt((mdate - day * 24 * 3600) / 3600);
+				var minute = parseInt((mdate - day * 24 * 3600 - hour * 3600) / 60);
+				return day + "天" + hour + "时" + minute + "分";
+			}
+
+			function orderStore(i) {
+				localStorage.setItem('order', JSON.stringify(orderArray[i]));
+				localStorage.setItem('orderId', JSON.stringify(orderArray[i].OrderID));
+				window.location.href = "orderDetail.html";
+			}
+
+			//分界线
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			mui('.mui-scroll-wrapper').scroll();
+			mui('body').on('shown', '.mui-popover', function(e) {
+
+			});
+			mui('body').on('hidden', '.mui-popover', function(e) {
+
+			});
+
+			function clickItem1() {
+				title.innerHTML = "全部订单";
+				setHtml(orderArray, "您还没有生成订单");
+			}
+			document.getElementById('item1').onclick = function() {
+				title.innerHTML = "全部订单";
+				setHtml(orderArray, "您还没有生成订单");
+				popu.style.display = 'none';
+
+			}
+
+			document.getElementById('item2').onclick = function() {
+				title.innerHTML = "预定成功";
+
+				var list = listAddOrder("1");
+
+				setHtml(list, "您还没有预定成功的订单");
+				popu.style.display = 'none'
+
+			}
+			document.getElementById('item3').onclick = function() {
+				title.innerHTML = "已取消";
+				var list13 = listAddOrder('13');
+				var list4 = listAddOrder('4');
+				var list7 = listAddOrder('7')
+				var list = list13.concat(list4, list7);
+				setHtml(list, "您还没有已取消的订单");
+				popu.style.display = 'none';
+			}
+			document.getElementById('item4').onclick = function() {
+				title.innerHTML = "未取车";
+				var list5 = listAddOrder('5');
+				var list6 = listAddOrder('6');
+				var list13 = listAddOrder('13');
+				var list14 = listAddOrder('14');
+				var list = list5.concat(list5, list6, list13, list14);
+				setHtml(list, "您还没有未取车的订单");
+				popu.style.display = 'none';
+
+			}
+			document.getElementById('item5').onclick = function() {
+				title.innerHTML = "已取车";
+				var list2 = listAddOrder('2');
+				setHtml(list2, "您还没有已取车订单");
+				popu.style.display = 'none';
+			}
+			document.getElementById('item6').onclick = function() {
+				title.innerHTML = "未还车";
+				var list11 = listAddOrder('11');
+				var list12 = listAddOrder('12');
+				var list15 = listAddOrder('15');
+				var list = list11.concat(list12, list15);
+				setHtml(list, "您还没有未还车的订单");
+				popu.style.display = 'none';
+			}
+			document.getElementById('item7').onclick = function() {
+				title.innerHTML = "已完成";
+				var list10 = listAddOrder('10');
+				var list3 = listAddOrder('3');
+				var list = list10.concat(list3);
+				setHtml(list, "您还没有已完成订单");
+				popu.style.display = 'none';
+			}
+
+			function listAddOrder(status) {
+
+				var list = new Array();
+				for (var i = 0; i < orderArray.length; i++) {
+					if (orderArray[i].Status == status) {
+						list.push(orderArray[i]);
+					}
+				}
+
+				return list;
+			}
+		</script>
+
+	</body>
+
+</html>

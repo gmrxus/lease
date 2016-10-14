@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			input {
+				border-left: 1px #333 solid;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新增发票抬头</h1>
+		</header>
+		<div class="mui-content"><br />
+			<form class="mui-input-group">
+
+				<div class="mui-input-row">
+					<label>发票抬头</label>
+					<input id="text" type="text" class="mui-input-clear" placeholder="单位/个人">
+				</div>
+				<ul class="mui-table-view mui-table-view-radio">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right mui-selected">
+							<span>
+								单位
+							</span>
+
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-selected">
+						<a class="mui-navigate-right">
+							<span>
+								个人
+							</span>
+						</a>
+					</li>
+
+				</ul>
+
+				<div class="mui-button-row">
+					<button id="btnOK" type="button" class="mui-btn mui-btn-primary" onclick="return false;">保存</button>&nbsp;&nbsp;
+					<button id="btnNO" type="button" class="mui-btn mui-btn-danger" onclick="return false;">取消</button>
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript">
+			var info = document.getElementById('text');
+			var taitou = 2;
+			var value;
+			var loginName = JSON.parse(localStorage.getItem('info')).LoginName;
+			document.querySelector('.mui-table-view.mui-table-view-radio').addEventListener('selected', function(e) {
+				taitou = e.detail.el.children[0].innerText == "个人" ? 2 : 1;
+				//				alert(e.detail.el.children[0].innerText=="个人"?2:1);
+			});
+			window.onload = function() {
+				var title = localStorage.getItem('title');
+				document.getElementById('text').value = title;
+
+			}
+			document.getElementById('btnOK').onclick = function() {
+				value = info.value;
+				if (value) {
+					if(!/^[\u4e00-\u9FFFa-z0-9\.]{2,}$/.test(value)){
+						alert("请填写正确发票抬头");
+						return;
+					}
+			
+
+
+					addTaitou(loginName, value, taitou);
+					localStorage.setItem('title', '');
+
+				} else {
+
+					localStorage.setItem('title', '');
+					window.history.back();
+				}
+			}
+			document.getElementById('btnNO').onclick = function() {
+				localStorage.setItem('title', '');
+				window.history.back();
+			}
+
+			function addTaitou(loginName, value, taitou) {
+				myUrl = HEAD + BODY_BILL + ADD_BILL_TITLE;
+				myData = {
+					argLoginName: loginName,
+					argTitle: value,
+					argUserTypeId: taitou
+				}
+				netRequest(myUrl, myData);
+			}
+
+			function getdata(data) {
+				if (data == 1) {
+					alert("操作成功");
+					window.location.href = 'setBill1.html';
+				} else {
+					window.location.href = 'setBill1.html';
+				}
+			}
+		</script>
+	</body>
+
+</html>

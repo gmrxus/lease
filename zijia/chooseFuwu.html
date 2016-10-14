@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>选择服务</title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/myapp.css" />
+		<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../js/URL.js"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			.mui-content {
+				font-size: 16px;
+			}
+			
+			.youhuijuan {
+				/*height: 140px;*/
+				background-color: #FF7F50;
+				margin: 10px;
+				padding: 10px;
+			}
+			
+			.typeName {
+				margin-top: 10px;
+				color: white;
+				font-size: 25px;
+				float: left;
+			}
+			
+			.status {
+				float: right;
+				margin-top: 10px;
+				margin-right: 20px;
+				color: white;
+			}
+			
+			.time {
+				font-size: 15px;
+				margin-top: 20px;
+				float: left;
+				color: white;
+			}
+			
+			.rule {
+				font-size: 15px;
+				margin-top: 40px;
+				color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">选择服务</h1>
+		</header>
+		<div class="mui-content">
+			<div>
+				必选服务
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						<span id="account">
+	    	            	手续费 ｜
+	    	            </span>
+
+						<span id="poundage"></span><span id="totalpoundage" style="color:#B8860B;float: right;">¥20</span><br />
+
+					</li>
+					<li class="mui-table-view-cell">
+						<label style="width: 40%">
+	    	            	基本保险费 |
+	    	            </label> <span id="baoxianfei"></span><span id="totalbaoxianfei" style="color:#B8860B;float: right;">¥20</span><br/>
+						<span style="color: #777777; font-size: 13px;">
+	    	        		必须部分，客户只需承担1500以内的车辆损失费
+	    	        	</span>
+					</li>
+
+				</ul>
+
+				可选服务
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						不计免赔服务 ｜<span id="totalbujimianpei" style="color:#B8860B;"></span><span id="bujimianpei" style="font-size: 12px;color: #008000;"></span>
+						<div id="isbujimianpei" class="mui-switch mui-switch-mini mui-active mui-pull-right">
+							<div class="mui-switch-handle"></div>
+						</div><br />
+						<textarea style="color: #777777; font-size: 11px;width: 80%;border: hidden;margin-bottom: 0px;padding: 0px;word-wrap: normal;" readonly="">如果是时租，每天最高30元，不足半个小时按半个小时计算，超过则按一个小时计算</textarea>
+
+						<br/>
+						<span style="color: #777777; font-size: 13px;">
+						客户不必承担保险范围内的任何赔偿
+					</span>
+
+					</li>
+				</ul>
+				<br />
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+						开具发票
+						<div class="mui-switch mui-switch-mini mui-active mui-pull-right">
+							<div class="mui-switch-handle"></div>
+						</div>
+						<br/>
+						<span style="color: #777777; font-size: 13px;">
+						客户不必承担保险范围内的任何赔偿
+					</span>
+
+					</li>
+					<li id="youhuijuan" class="mui-table-view-cell">
+						优惠券选择
+
+						<a href="#modal"  id="youhuijuantext" style="float: right;" style="color: black;margin: 12px;font-size: 16px;">请选择</a>
+
+					</li>
+				</ul>
+				<center><button type="button" class="mui-btn mui-btn-blue" style=" width: 80%;height: 40px;margin-top: 20px;" onclick="next()">下一步</button></center>
+
+			</div>
+		</div>
+
+		<div id="modal" class="mui-modal">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-icon mui-icon-close mui-pull-right" id="cancel" style="color: white;" href="#modal"></a>
+				<h1 class="mui-title">优惠券</h1>
+			</header>
+			<div class="mui-content" style="height: 100%;">
+				<div class="mui-scroll-wrapper" style="margin-top: 40px;">
+					<div class="mui-scroll">
+						<ul id="cont1" class="mui-table-view">
+							
+
+						</ul>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</body>
+	<script type="text/javascript">
+		//	alert(localStorage.getItem("VehicleNo"))
+		$(function() {
+			GetCommissionCostBeforeBookVehicle(localStorage.getItem("VehicleNo"));
+			GetExcludingDeductibleType();
+			var DeductibleTypeID = localStorage.getItem("zijiatitle") == "长租服务" ? "day" : "hour";
+			GetExcludingDeductibleMoney(DeductibleTypeID, localStorage.getItem("minute"));
+			getCouponByLoginName(localStorage.getItem("username"));
+		})
+		mui('.mui-scroll-wrapper').scroll({
+			//			deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			scrollY: true, //是否竖向滚动
+			scrollX: false, //是否横向滚动
+			startX: 0, //初始化时滚动至x
+			startY: 0, //初始化时滚动至y
+			indicators: true, //是否显示滚动条
+			deceleration: 0.0010, //阻尼系数,系数越小滑动越灵敏
+			bounce: true //是否启用回弹
+		});
+		var isbujimianpei = document.getElementById("isbujimianpei").classList.contains("mui-active");
+		document.getElementById("isbujimianpei").addEventListener("toggle", function(event) {
+			if (event.detail.isActive) {
+				isbujimianpei = true;
+			} else {
+				isbujimianpei = false;
+			}
+		})
+
+        var youhuijuandata = false;
+		function getdata(data, myUrl) {
+			//			alert(myUrl)
+//			console.log(myUrl)
+			if (myUrl == HEAD + BODY + "/GetExcludingDeductibleType") {
+				if (localStorage.getItem("zijiatitle") == "长租服务") {
+					for (var i = 0; i < data.Table.length; i++) {
+						if (data.Table[i].DeductibleTypeID == "day") {
+							document.getElementById("bujimianpei").innerHTML = data.Table[i].DeductibleAmount + "/天";
+						}
+					}
+				} else {
+					for (var i = 0; i < data.Table.length; i++) {
+						if (data.Table[i].DeductibleTypeID == "hour") {
+							document.getElementById("bujimianpei").innerHTML = data.Table[i].DeductibleAmount + "/小时";
+							//							document.getElementById("totalbujimianpei").innerHTML = "¥" + parseFloat(data.Table[i].DeductibleAmount) * parseFloat(localStorage.getItem("days"));
+						}
+					}
+				}
+			} else if (myUrl == HEAD + "/lease/WsLeaseOrderBusiness.asmx/GetCommissionCostBeforeBookVehicle") {
+				//保险费
+				if (data.Result == 1) {
+					var baoxianfei;
+					var totalbaoxianfei;
+					if (localStorage.getItem("zijiatitle") == "长租服务") {
+						baoxianfei = "¥" + data.Table[0].insuranceCostBasic + "*" + parseInt(localStorage.getItem("days"));
+						totalbaoxianfei = Number(data.Table[0].insuranceCostBasic) * parseInt(localStorage.getItem("days"))
+					} else {
+						baoxianfei = "¥" + data.Table[0].insuranceCostBasic + "*" + Math.ceil(parseInt(localStorage.getItem("days")) / 24);
+						totalbaoxianfei = Number(data.Table[0].insuranceCostBasic) * Math.ceil(parseInt(localStorage.getItem("days")) / 24)
+					}
+					//				alert(baoxianfei)
+					$("#poundage").text("¥" + data.Table[0].commissionCharge);
+					$("#baoxianfei").text(baoxianfei);
+					$("#totalpoundage").text("¥" + data.Table[0].commissionCharge);
+					$("#totalbaoxianfei").text("¥" + totalbaoxianfei);
+					window.localStorage.setItem("shouxufei", data.Table[0].commissionCharge);
+					window.localStorage.setItem("baoxianfei", baoxianfei);
+				}
+			} else if (myUrl == HEAD + "/lease/WebService1.asmx/GetCouponByLoginName") {
+				//优惠券
+				var nowDate = new Date();
+				if (data.Result == 1) {
+					 
+					var table = data.Table;
+					var str = "";
+					for (var i = 0; i < table.length; i++) {
+						
+						if (table[i].CouponStatusName == "未使用") {
+							youhuijuandata = true;
+								var coupon = table[i];
+								var id = coupon.CouponID + "|" + coupon.CouponTypeName
+//								console.log(id);
+								str += '<a href="#modal"><li class="mui-table-view-cell youhuijuan" id=' + id + '><div class="typeName">' + coupon.CouponTypeName + '</div><div class="status">' + coupon.CouponStatusName + '</div><br /><br /><div class="time">有效期 : ' + formatDate(coupon.PeriodValidityStart) + '  至  ' + formatDate(coupon.PeriodValidityEnd) + '</div><br /><div class="rule">' + coupon.CouponRuleName+':  '+coupon.CouponAmout + '</div></li></a>';
+							
+						}
+					}
+					$("#cont1").append(str);
+				} else {
+//					alert("您还没有优惠券");
+				}
+			} else {
+				document.getElementById("totalbujimianpei").innerHTML = "¥" + data.Table[0].money;
+			}
+		}
+		var CouponID = "";
+		var CouponTypeName = "";
+		$(".mui-scroll").on("tap", ".youhuijuan", function() {
+			//			alert(this.id);
+			var couponTypeNameIndex = this.id.indexOf("|");
+			CouponID = this.id.substring(0, couponTypeNameIndex);
+			CouponTypeName = this.id.substring(couponTypeNameIndex + 1, this.id.length)
+			document.getElementById("youhuijuantext").innerHTML = CouponTypeName
+		})
+		$("#cancel").on("tap",function(){
+			CouponID = "";
+			CouponTypeName = "";
+			document.getElementById("youhuijuantext").innerHTML = "请选择"
+		})
+		$("#youhuijuantext").on("tap",function(){
+//			alert(JSON.stringify(youhuijuandata))
+			if (youhuijuandata) {
+//				alert(youhuijuandata)
+				this.href = "#modal"
+				
+			}
+			else{
+				
+				mui.toast("您没有可选择的优惠券");
+			}
+		})
+
+		function next() {
+			window.localStorage.setItem("isbujimianpei", isbujimianpei);
+			var bujimianpeiText = document.getElementById("totalbujimianpei").innerHTML
+			window.localStorage.setItem("bujimianpeiText", bujimianpeiText);
+			window.localStorage.setItem("youhuijuanID", CouponID);
+			window.localStorage.setItem("CouponTypeName", CouponTypeName);
+			clicked("yudingCar.html",true,false);
+		}
+
+		function formatDate(date) {
+			var str = date.indexOf(' ');
+			return date.substring(0, str);
+		}
+	</script>
+
+</html>

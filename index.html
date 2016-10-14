@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/iconfont.css" />
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			#banner {
+				height: 200px;
+				/*width: auto\9;*/
+				width: 100%;
+			}
+			
+			#lunbo {
+				height: 100%;
+				width: 100%;
+			}
+			
+			#left,
+			#left-head,
+			#left-bottomm {
+				float: left;
+				border-right: solid;
+				border-bottom: solid;
+				border-width: 1px;
+				border-color: #BBBBBB;
+			}
+			
+			#left,
+			#right,
+			#right-head,
+			#right-bottom,
+			#left-head,
+			#left-bottomm {
+				width: 50%;
+				height: auto;
+				font: "微软雅黑";
+				font-size: 16px;
+				padding: 10px;
+			}
+			
+			#right,
+			#right-head,
+			#right-bottom {
+				float: right;
+				border-bottom: solid;
+				border-width: 1px;
+				border-color: #BBBBBB;
+			}
+			/*#right-head {
+				background-color: darkgoldenrod;
+				float: right;
+				width: 50%;
+				height: 70px;
+				line-height: 50px;
+			}*/
+			/*#right-bottom {
+				background-color: coral;
+				float: right;
+				width: 50%; 
+				height: 70px;
+				
+				line-height: 50px;
+			}*/
+			
+			body {
+				text-align: center;
+				background-color: white;
+				font: "微软雅黑;
+
+			}
+			
+			.mui-content {
+				height: auto;
+				/*				margin-bottom: 100px;*/
+			}
+			
+			.righttext {
+				margin-top: 20px;
+				float: left;
+			}
+			
+			.leftimage {
+				width: 40px;
+				height: 40px;
+				margin: 10px;
+				float: left;
+			}
+			
+			#left-bottomm,
+			#right-bottom {
+				margin-bottom: 50px;
+			}
+			
+			#left,
+			#right {
+				/*padding: px;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<header id="head" class="mui-bar mui-bar-nav">
+			<h1 class="mui-title">分时租赁</h1>
+		</header>
+		<div class="mui-content">
+			<div id="banner" align="center">
+				<a>
+					<img id="lunbo" src="images/1.png" />
+				</a>
+			</div>
+			<div id="main-table">
+				<div id="main-table-middle">
+					<div id="left">
+						<img style="margin-top: 5px;" src="images/zijia.png" />
+						<div style="margin-bottom: 5px;">
+							预订
+						</div>
+
+					</div>
+					<div id="right">
+						<img style="margin-top: 5px;" src="images/rightquche.png" />
+						<div style="margin-bottom: 5px;">
+							取车
+						</div>
+					</div>
+				</div>
+				<div id="main-table-bottom">
+					<div id="left-head">
+						<img class="leftimage" src="images/huanche.png" />
+						<span class="righttext">
+							还车
+						</span>
+					</div>
+					<div id="right-head" onclick="tuiding()">
+						<img class="leftimage" src="images/tuiding.png" />
+						<span class="righttext">
+							退订
+						</span>
+
+					</div>
+					<div id="left-bottomm">
+						<img class="leftimage" src="images/kaimen.png" />
+						<span class="righttext">
+							开门
+						</span>
+
+					</div>
+					<div id="right-bottom">
+						<img class="leftimage" src="images/suomen.png" />
+						<span class="righttext">
+							锁门
+						</span>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="picture" class="mui-popover mui-popover-action mui-popover-bottom">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a onclick="kaimen()">开门</a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a onclick="suomen()">锁门</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a href="#picture"><b>取消</b></a>
+				</li>
+			</ul>
+		</div>
+		<nav class="mui-bar mui-bar-tab">
+			<a id="fujin" class="mui-tab-item">
+				<span class="mui-icon iconfont icon-fujin"></span>
+				<span class="mui-tab-label">附近</span>
+			</a>
+			<a id="kefu" class="mui-tab-item">
+				<span class="mui-icon iconfont icon-kefu"></span>
+				<span class="mui-tab-label">客服</span>
+			</a>
+			<a id="wode" class="mui-tab-item">
+				<span class="mui-icon iconfont icon-wode"></span>
+				<span class="mui-tab-label">我的</span>
+			</a>
+		</nav>
+	</body>
+	<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+
+			})
+			//		a = a || 1;
+			//alert("a");
+		$("#wode").on("tap", function() {
+			if(localStorage.getItem('info')) {
+				window.location.href = "wode.html";
+			} else {
+				window.location.href = "login.html";
+			}
+		})
+		$("#fujin").on("tap", function() {
+			if(localStorage.getItem("username")) {
+				clicked("fujin/reserve.html", true, false);
+			} else {
+				clicked("login.html", true, false);
+			}
+		})
+		$("#kefu").on("tap", function() {
+				window.location.href = 'service.html';
+
+				
+				//				window.location.href = "quche/barcode_scan.html";
+
+			})
+			//			function getQuestion() {
+			//				var myUrl = HEAD + BODY + GET_QUESTION;
+			//				var myData = {
+			//					argLoginName: "penghao",
+			//					argLoginType: "1"
+			//				}
+			//			};
+			//
+			//			function getQuestion() {
+			//				var myUrl = HEAD + BODY + GET_QUESTION;
+			//				var myData = {
+			//					argLoginName: "penghao",
+			//					argLoginType: "1"
+			//				}
+			//				netRequest1(myUrl, myData, new netRequestListener(data).getdata());
+			//			};
+		function getdata(data) {
+			if(data.Result == 1) {
+
+				//				alert(data.Table[0].QuestionDesc)
+			} else {
+				alert("不能获取")
+			}
+		}
+		//自驾
+		document.getElementById("left").onclick = function() {
+			clicked("zijia/chooseitime.html", true, false);
+		}
+
+		document.getElementById("left-head").onclick = function() {
+			if(localStorage.getItem("username")) {
+				window.localStorage.setItem("zhiling", "还车")
+				clicked("xuding/xuding.html");
+			} else {
+				clicked("login.html", true, false);
+			}
+			//			if (localStorage.getItem("username")) {
+			//				window.localStorage.setItem("zhiling", "续订")
+			//				clicked("xuding/xuding.html");
+			//			} else {
+			//				clicked("login.html", true, false);
+			//			}
+		}
+		document.getElementById("right").onclick = function() {
+			if(localStorage.getItem("username")) {
+				window.localStorage.setItem("zhiling", "取车")
+				clicked("xuding/xuding.html");
+			} else {
+				clicked("login.html", true, false);
+			}
+		}
+		document.getElementById("left-bottomm").onclick = function() {
+			if(localStorage.getItem("username")) {
+				window.localStorage.setItem("zhiling", "开门")
+				clicked("xuding/xuding.html");
+			} else {
+				clicked("login.html", true, false);
+			}
+			//			if (localStorage.getItem("username")) {
+			//				window.localStorage.setItem("zhiling", "还车")
+			//				clicked("xuding/xuding.html");
+			//			} else {
+			//				clicked("login.html", true, false);
+			//			}
+		}
+		document.getElementById("right-bottom").onclick = function() {
+			//			mui('#picture').popover('toggle');
+
+			if(localStorage.getItem("username")) {
+				window.localStorage.setItem("zhiling", "锁门")
+				clicked("xuding/xuding.html");
+			} else {
+				clicked("login.html", true, false);
+			}
+		}
+
+		function kaimen() {
+
+			if(localStorage.getItem("username")) {
+				window.localStorage.setItem("zhiling", "开门")
+				clicked("xuding/xuding.html");
+			} else {
+				clicked("login.html", true, false);
+			}
+		}
+
+		function suomen() {
+			if(localStorage.getItem("username")) {
+				window.localStorage.setItem("zhiling", "锁门")
+				clicked("xuding/xuding.html");
+			} else {
+				clicked("login.html", true, false);
+			}
+		}
+
+		function tuiding() {
+			if(localStorage.getItem("username")) {
+				window.localStorage.setItem("zhiling", "退订")
+				clicked("xuding/xuding.html");
+			} else {
+				clicked("login.html", true, false);
+			}
+		}
+	</script>
+
+</html>

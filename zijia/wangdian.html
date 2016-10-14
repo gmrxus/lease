@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>选择门店</title>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			#leftDiv {
+				margin-top: 10px;
+				width: 30%;
+			}
+			
+			.mui-pull-right {
+				margin-top: 10px;
+				width: 69.7%;
+			}
+			
+			#rightTitle {
+				font-size: 14px;
+				margin-left: 10px;
+			}
+			
+			.address {
+				font-size: 13px;
+				color: #929292;
+			}
+			.lab{
+				
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">选择门店</h1>
+		</header>
+		<div class="mui-content">
+			<div id="leftDiv" class="mui-pull-left">
+				<ul id="leftView" class="mui-table-view">
+					<!--<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" id="first">
+	    		                Item 1
+	    		            </a>
+					</li>-->
+
+				</ul>
+			</div>
+
+			<div id="rightView" class="mui-pull-right">
+				<!--<label id="rightTitle">附近门店</label>
+				<ul id="rightView" class="mui-table-view">
+				<li class="mui-table-view-cell rightviewCell">
+						<div id="daohang" class="mui-pull-right mui-media-object mui-icon mui-icon-redo"></div>
+						<div class="mui-media-body">
+							关谷金融港点
+							<br />
+							<span class="address">洪山区光谷大道77号</span>
+						</div>
+
+					</li>
+
+				</ul>-->
+
+			</div>
+		</div>
+	</body>
+	<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function() {
+			
+			GetNetworkInCity(localStorage.getItem("username"),localStorage.getItem('cityId'), "", "");			
+		})
+		
+
+		function getdata(data) {
+			if (data.Result == 0) {
+				mui.toast("无数据");
+				return;
+			}
+			var rightlist = "";
+			var leftlist = "";
+			//			alert(aftervalue)
+			//			alert(data.Table.length)
+			//for (var i = 0; i <  aftervalue.length; i++) {
+			//}
+			//var aftervalue = uniqueArray(data.Table);
+			var cityArr = new Array();
+			for (var i = 0; i < data.Table.length; i++) {
+				if (cityArr.indexOf(data.Table[i].cityName) == -1) {
+					cityArr.push(data.Table[i].cityName);
+				}
+			}
+			
+			for (var j = 0; j < cityArr.length; j++) {
+//				console.log(cityArr[j]);
+				leftlist += '<li class="mui-table-view-cell"><a class="mui-navigate-right" href="#' + cityArr[j] + '">' + cityArr[j] + '</a></li>';
+				rightlist += '<div id=' + cityArr[j] + '><label class="lab">' + cityArr[j] + '</label><ul class="mui-table-view">'
+				for (var i = 0; i < data.Table.length; i++) {
+					if (data.Table[i].cityName == cityArr[j]) {
+//						var positionGPS = new Object();
+//						positionGPS.Longitude = data.Table[i].Longitude;
+//						positionGPS.Latitude = data.Table[i].Latitude;
+//						positionGPS = JSON.stringify(positionGPS) <a id='+positionGPS+' class="mui-pull-right mui-media-object mui-icon mui-icon-redo"></a>
+						rightlist += '<li class="mui-table-view-cell rightviewCell" id="' + data.Table[i].networkId + '"><div class="mui-media-body"><span class=' + data.Table[i].networkId + '>' + data.Table[i].networkName + '</span> <br /><span class="address">' + data.Table[i].Addr + '</span></div></li>'
+					}
+				}
+				rightlist += '</ul></div>';
+				
+			}
+			$("#leftView").append(leftlist);
+			$("#rightView").append(rightlist);
+		}
+		$(".mui-pull-left").on("tap", "a", function() {
+//						alert(this.href)
+//						document.getElementById(this.text).scrollTop = 100;
+//						alert(document.getElementById(this.text).innerHTML);
+			//			$(".rightviewCell").remove();
+			//			var rightlist = "";
+			//			for (var i = 0; i < 10; i++) {
+			//				rightlist += '<li class="mui-table-view-cell rightviewCell"><div class="mui-pull-right mui-media-object">0.28km</div><div class="mui-media-body">关谷金融港点<br /><span class="address">洪山区光谷大道77号12121212</span></div></li>'
+			//			}
+			//			$("#rightView").append(rightlist);
+		})
+		$(".mui-pull-right").on("tap", ".mui-table-view-cell", function() {
+			var networkId = this.getAttribute('id')
+			var mendian = $('.' + networkId + '').text();
+			if (localStorage.getItem("action") == "xiugaidingdan") {
+				window.localStorage.setItem("ExpectReturnCarNetworkName", mendian);
+				window.localStorage.setItem("ExpectReturnCarNetworkID", networkId);
+				clicked("../xuding/xudingdetail.html", true, false);
+			} else if (localStorage.getItem("action") == "quchechengshi") {
+				//				alert()
+				window.localStorage.setItem("quchenetworkId", networkId);
+				window.localStorage.setItem("quchemendian", mendian);
+				window.localStorage.setItem("huanchenetworkId", networkId);
+				window.localStorage.setItem("huanchemendian", mendian);
+			} else if (localStorage.getItem("action") == "huanchechengshi") {
+				window.localStorage.setItem("huanchenetworkId", networkId);
+				window.localStorage.setItem("huanchemendian", mendian);
+			} else if (localStorage.getItem("action") == "quche") {
+				//				alert("32")
+				window.localStorage.setItem("quchenetworkId", networkId);
+				window.localStorage.setItem("quchemendian", mendian);
+				window.localStorage.setItem("huanchenetworkId", networkId);
+				window.localStorage.setItem("huanchemendian", mendian);
+//				alert(localStorage.getItem("quchecity"))
+				window.localStorage.setItem("huancheCity",localStorage.getItem("qucheCity"))
+			} else if (localStorage.getItem("action") == "huanche") {
+				window.localStorage.setItem("huanchenetworkId", networkId);
+				window.localStorage.setItem("huanchemendian", mendian);
+			}
+			clicked("chooseitime.html", true, false);
+		})
+		
+//		$(".mui-pull-right").on("tap",".mui-icon-redo",function(){
+//			alert("2")
+//		})
+
+		function uniqueArray(e) {
+			e = e || [];
+			var a = {};
+			for (var i = 0; i < e.length; i++) {
+				var v = e[i].cityName;
+				if (typeof(a[v]) == 'undefined') {
+					a[v] = 1;
+				}
+			};
+			e.length = 0;
+			for (var i in a) {
+				e[e.length] = i;
+			}
+			console.log(e)
+			return e;
+		}
+	</script>
+
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style type="text/css">
+			li {}
+			
+			img {
+				height: 60px;
+			}
+			
+			#cont {
+				text-align: center;
+			}
+			
+			.date {
+				margin-top: 22px;
+				padding-right: 10px;
+				padding-left: 10px;
+				float: left;
+				text-align: center;
+				/*width: 20%;
+				float: left;*/
+			}
+			
+			.img {
+				padding-right: 10px;
+				border-left: 1px #999 solid;
+				border-right: 1px #999 solid;
+				padding-left: 10px;
+				float: left;
+				/*float: left;
+				width: 20%;*/
+			}
+			
+			.content {
+				text-align: center;
+				margin-top: 12px;
+				padding-left: 10px;
+				padding-right: 10px;
+				float: left;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">提现记录</h1>
+		</header>
+		<div class="mui-content">
+			<ul id="cont" class="mui-table-view">
+				
+
+			</ul>
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+
+			var loginName = JSON.parse(localStorage.getItem('info')).LoginName;
+			gettixianHistory(loginName);
+
+			function gettixianHistory() {
+				var myUrl = HEAD + BODY + GET_TIXIAN_HISTORY;
+				var myData = {
+					argLoginName: loginName,
+					argPageIndex: 1,
+					argPageSize: 100
+				};
+				netRequest(myUrl, myData);
+			}
+			var html = "";
+
+			function getdata(data) {
+				console.log(JSON.stringify(data.Table));
+				if (1 == data.Result) {
+
+					var table = data.Table;
+					for (var i = 0; i < table.length; i++) {
+						var date = parserDate(table[i]);
+						var typeName = table[i].PaymentTypeName;
+						var cost = table[i].TxnAmt;
+						var img = setImg(table[i]);
+						var account = table[i].PaymentAccount;
+
+						html += '<li class="mui-table-view-cell"><div class="date">' + date + '</div><div class="img"><img src=' + img + ' /></div><div class="content">' + cost + '<br /> ' + "账号 : " + account + '</div></li>';
+					}
+
+				} else {
+					html = '<div style="padding-top: 50px; padding-bottom: 50px;">您还没生成提现记录</div>';
+				}
+				document.getElementById("cont").innerHTML = html;
+			}
+
+			function parserDate(item) {
+				var date = item.TxnTime
+				var s = date.indexOf("/") + 1;
+				var e = date.indexOf(":") - 3;
+				var date = date.substring(s, e);
+				var date = date.replace("/", "-");
+				return date;
+			}
+
+			function setImg(itme) {
+				if ("银联支付" == itme.PaymentTypeName) {
+					return "images/payment-card.png";
+				}
+				if ("支付宝" == itme.PaymentTypeName) {
+					return "images/alipay.png";
+				}
+				if ("微信支付" == itme.PaymentTypeName) {
+					return "images/weixin3.png";
+				}
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>预订车辆</title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			label {
+				color: #0062CC;
+				font-size: 17px;
+			}
+			
+			.mui-input {
+				width: 50%;
+				font-size: 16px;
+				text-align: right;
+			}
+			
+			#balance {
+				font-size: 13px;
+				color: #0062CC;
+				margin: 5px;
+			}
+			
+			#money {
+				font-size: 13px;
+				color: #0062CC;
+				margin: 5px;
+				float: right;
+			}
+			
+			.days {
+				float: left;
+				text-align: center;
+				margin-left: 12%;
+				margin-top: 25px;
+				width: 35px;
+				height: 35px;
+			}
+			
+			#quchemendian,
+			#huanchemendian {
+				font-size: 13px;
+			}
+			
+			.lefttext {
+				color: #0062CC;
+				font-size: 17px;
+				width: 40%;
+				float: left;
+				display: inline;
+			}
+			
+			.righttext {
+				color: #B8860B;
+				font-size: 16px;
+				text-align: right;
+				width: 40%;
+				float: right;
+				display: inline;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">确认订单</h1>
+		</header>
+
+		<div class="mui-content">
+
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell mui-media">
+
+					<img class="mui-media-object mui-pull-left" id="carPicture">
+					<div class="mui-media-body">
+						<span id="carname">
+								
+							</span>
+						<p id="carinfomation" class="mui-ellipsis"></p>
+					</div>
+
+				</li>
+				<li class="mui-table-view-cell">
+					<div style="float: left; width: 33%;text-align: center;">
+						<span style="font-size: 14px;">
+	        			取车时间
+	        	</span><br />
+						<textarea id="quchetime" style="font-size: 13px;height: 60px;" readonly=""></textarea>
+						<!--<input id="quchetime" style="font-size: 13px;height: 100px;" type="text" placeholder="" value="" readonly="" />-->
+
+					</div>
+					<center class="days">
+						<span class="mui-badge mui-badge-primary" id="daysvalue">2</span>
+					</center>
+					<div style="float: right; width: 33%;text-align: center;">
+						<span style="font-size: 14px; ">
+	        			还车时间
+	        		</span><br />
+						<textarea id="huanchetime" style="font-size: 13px;height: 60px;" readonly=""></textarea>
+					</div>
+				</li>
+
+			</ul>
+
+			<form id='login-form' class="mui-input-group" style="margin: 5px;">
+				<div class="mui-input-row">
+					<label>取车门店</label>
+					<input id='quchemendian' type="text" class="mui-input-clear mui-input" value="" disabled="">
+				</div>
+				<div class="mui-input-row">
+					<label>还车门店</label>
+					<input id='huanchemendian' type="text" class="mui-input-clear mui-input" value="" disabled="">
+				</div>
+			</form>
+			<div>
+				费用明细
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell">
+
+						<div>
+							<span class="lefttext">车辆租赁费</span>
+							<span id='zulinfeiyong' class="righttext"></span>
+						</div>
+
+						<div class="mui-input-row">
+
+							<span class="lefttext">基本保险费</span>
+							<span id='baoxianfei' class="righttext"></span>
+
+						</div>
+						<div class="mui-input-row">
+							<span class="lefttext">手续费</span>
+							<span id='fuwufei' class="righttext"></span>
+
+						</div>
+						<div id="bujimianpei" class="mui-input-row">
+							<span class="lefttext">不计免赔费用</span>
+							<span id='bujimianpeifei' class="righttext"></span>
+
+						</div>
+						<div id="yidihuanche" class="mui-input-row">
+							<span id="yidihuanchetitle" class="lefttext">异地还车费用</span>
+							<span id="yidihuanchefei" class="righttext"></span>
+
+						</div>
+						<div id="youhuijuan" class="mui-input-row">
+							<span class="lefttext">优惠券</span>
+							<span id="youhuijuantext" class="righttext"></span>
+
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<span id="balance">账户余额:<span id="balancemoney"></span>元</span>
+			<span id="money">预估费用:<span id="moneyright"></span>元</span>
+			<div align="center"><button style="width: 80%;background-color: #0062CC;" onclick="yuding()">预定</button></div>
+		</div>
+
+	</body>
+	<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/URL.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+		var ValuationType;
+		var bujimianpeitype = "";
+		var youhuijuanID = "";
+		$(function() {
+			document.getElementById("quchetime").value = localStorage.getItem("startTime");
+			document.getElementById("huanchetime").value = localStorage.getItem("endTime");
+			document.getElementById("quchemendian").value = localStorage.getItem("quchemendian");
+			document.getElementById("huanchemendian").value = localStorage.getItem("huanchemendian");
+			document.getElementById("daysvalue").innerHTML = localStorage.getItem("days");
+			document.getElementById("carname").innerHTML = localStorage.getItem("VehicleNo");
+			document.getElementById("fuwufei").innerHTML = "¥" + localStorage.getItem("shouxufei");
+			document.getElementById("baoxianfei").innerHTML = localStorage.getItem("baoxianfei");
+			info = JSON.parse(localStorage.getItem('info'));
+			document.getElementById('balancemoney').innerHTML = info.Balance;
+
+			var cartype = JSON.parse(localStorage.getItem("carTypeStr"));
+			document.getElementById("carPicture").src = cartype.Pictrue ? cartype.Pictrue : "../images/E30.png";
+			document.getElementById("carinfomation").innerHTML = cartype.FuelType + "|" + cartype.SkyLight + "|" + cartype.DriveMode
+				//判断是长租或者是短租
+			if(localStorage.getItem("zijiatitle") == "长租服务") {
+				ValuationType = 3;
+				document.getElementById("zulinfeiyong").innerHTML = "¥" + cartype.OneDayRent + "*" + localStorage.getItem("days");
+			} else {
+				ValuationType = 2;
+				document.getElementById("zulinfeiyong").innerHTML = "¥" + cartype.OneHourRent + "*" + localStorage.getItem("days");
+			}
+			//判断有无不计免赔以及在长租短租情况下的不计免赔
+			if(localStorage.getItem("isbujimianpei") == "true") {
+				document.getElementById("bujimianpei").style.display = "block";
+				document.getElementById("bujimianpeifei").innerHTML = localStorage.getItem("bujimianpeiText")
+				if(localStorage.getItem("zijiatitle") == "长租服务") {
+					bujimianpeitype = "day"
+				} else {
+					bujimianpeitype = "hour"
+				}
+			} else {
+				document.getElementById("bujimianpei").style.display = "none";
+			}
+			//判断有无异店或异地还车
+			if(localStorage.getItem("tishititle")) {
+				document.getElementById("yidihuanche").style.display = "block";
+				document.getElementById("yidihuanchefei").innerHTML = localStorage.getItem("tishiweiba")
+				document.getElementById("yidihuanchetitle").innerHTML = localStorage.getItem("tishititle")
+			} else {
+				document.getElementById("yidihuanche").style.display = "none";
+			}
+			document.getElementById("youhuijuan").style.display = "none"
+				//判断有无优惠券
+			if(localStorage.getItem("youhuijuanID")) {
+				youhuijuanID = localStorage.getItem("youhuijuanID");
+				youhuijuanID = '["' + youhuijuanID + '"]';
+				document.getElementById("youhuijuan").style.display = "block"
+				document.getElementById("youhuijuantext").innerHTML = localStorage.getItem("CouponTypeName");
+
+			}
+			//预订费用查询
+			GetReservationCost(cartype.VehicleTypeID, ValuationType, 0, localStorage.getItem("startTime"), localStorage.getItem("endTime"), youhuijuanID, bujimianpeitype, localStorage.getItem("quchenetworkId"), localStorage.getItem("huanchenetworkId"))
+		})
+
+		function getdata(data, myurl) {
+			//			console.log(myurl);
+			//价格策略 数据
+			if(myurl == HEAD + "/lease/WebService1.asmx/GetPricePolicyByTypeName") {
+				var listCell = "";
+				for(var i = 0; i < data.Table.length; i++) {
+					listCell += '<li class="mui-table-view-cell"><a href="#modal"><span id="celue" style="color: #0062CC;font-size: 17px;">时租金策略</span><br />' + '<font size="2">每小时：</font><font id="OneHourRent" size="2">' + data.Table[i].OneHourRent + '元</font><br />' + '<font size="2">一天：</font><font id="OneDayRent" size="2">' + data.Table[i].OneDayRent + '元</font><br />' + '<font size="2">一星期：</font><font id="OneWeekRent" size="2">' + data.Table[i].OneWeekRent + '元</font><br />' + '</a></li>'
+				}
+				$("#modelView").append(listCell);
+			}
+			//预算费用
+			if(myurl == HEAD + "/lease/WebService1.asmx/GetReservationCost") {
+				window.localStorage.setItem("yudingcost", data.Table[0].cost)
+				$("#moneyright").text(data.Table[0].cost);
+			}
+			//预订车辆
+			if(myurl == HEAD + "/lease/WebService1.asmx/BookVehicleByNo2") {
+				if(data.Result == 1) {
+					localStorage.setItem("order", JSON.stringify(data.Table[0]))
+					status(data.Table[0].status, data.Table[0].rechargeAmount)
+				}
+			}
+		}
+	</script>
+
+	<script>
+		//预定按钮
+		function yuding() {
+			
+			if(info.Status == 1) {
+				if(localStorage.getItem("isbujimianpei") == "true") {
+					BookVehicleByNo2(localStorage.getItem("username"), localStorage.getItem("VehicleNo"), ValuationType, localStorage.getItem("startTime"), localStorage.getItem("endTime"), 6, youhuijuanID, bujimianpeitype, localStorage.getItem("quchenetworkId"), localStorage.getItem("huanchenetworkId"))
+				} else {
+					BookVehicleByNo2(localStorage.getItem("username"), localStorage.getItem("VehicleNo"), ValuationType, localStorage.getItem("startTime"), localStorage.getItem("endTime"), 6, youhuijuanID, "", localStorage.getItem("quchenetworkId"), localStorage.getItem("huanchenetworkId"))
+				}
+			} else {
+				
+				if(info.IDCardIMGPath) {
+					alert("请电话通知客服审核您的账号");
+					window.location.href = "../service.html";
+				} else {
+					alert("请上传照片审核您的账号");
+					window.location.href = "../uploadingIMG.html";
+				}
+			}
+
+		}
+		$(".mui-table-view").on("tap", ".mui-table-view-cell", function() {
+			$("#payType").text($("#celue").text());
+		});
+		//预订状态
+		function status(status, rechargeAmount) {
+			if(status == 0) {
+				mui.toast("预定失败");
+			}
+			if(status == 1) {
+				clicked("yudingchenggong.html", true, false);
+				mui.toast("预定成功");
+			}
+			if(status == 2) {
+				mui.toast("失败(时间不对(取车时间≥还车时间 或 取车时间＜系统当前时间))");
+			}
+			if(status == 3) {
+				mui.toast("失败(优惠券无效)");
+			}
+			if(status == 4) {
+				mui.toast("失败(不计免赔无效) ");
+			}
+			if(status == 5) {
+				var shibai = "失败(预定该站点车辆所需充值的金额:" + rechargeAmount + ")"
+				mui.toast(shibai);
+			}
+			if(status == 6) {
+				mui.toast("失败(没有符合条件的车辆供预定)");
+			}
+			if(status == 7) {
+				mui.toast("失败(不合法,同一个人同一时间只能订一台车");
+			}
+			if(status == 8) {
+				mui.toast("失败(不合法,只能预定3天内的车辆)");
+			}
+			if(status == 9) {
+				mui.toast("失败(车辆已下线,无法被预定)");
+			}
+			if(status == 10) {
+				mui.toast("失败(该用户不允许将车还到该网点)");
+			}
+			if(status == 11) {
+				mui.toast("失败(不合法，该用户不允许预定");
+			}
+			if(status == 12) {
+				mui.toast("失败(不合法，该用户未通过审核,不允许预定车辆)");
+			}
+		}
+	</script>
+
+</html>

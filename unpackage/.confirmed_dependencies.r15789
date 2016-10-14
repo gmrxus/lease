@@ -1,0 +1,57 @@
+{
+	"index.html": {
+		"resources": [
+			"js/common.js",
+			"images/yuding.png",
+			"images/gengduo.png",
+			"js/mui.min.js",
+			"images/zijia.png",
+			"images/tslbg.jpg",
+			"js/URL.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"fonts/iconfont.ttf",
+			"images/huanche.png",
+			"images/quche.png",
+			"js/jquery-1.11.1.min.js",
+			"service.html",
+			"login.html"
+		],
+		"refer": [
+			"zijia/chooseitime.html",
+			"service.html",
+			"login.html"
+		]
+	},
+	"zijia/chooseitime.html": {
+		"resources": [
+			"images/down.png",
+			"js/mui.picker.min.js",
+			"js/http.js",
+			"fonts/mui.ttf",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"service.html": {
+		"resources": [
+			"images/help.png",
+			"index.html",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"login.html": {
+		"resources": [
+			"fonts/mui.ttf",
+			"index.html"
+		],
+		"refer": [
+			"index.html"
+		]
+	}
+}

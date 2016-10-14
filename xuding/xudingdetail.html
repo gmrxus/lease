@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<!--<link rel="stylesheet" type="text/css" href="../css/app.css"/>-->
+		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
+		<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/time.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/time.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			.right {
+				width: 60%;
+				float: right;
+				border: hidden;
+				font-size: 13px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" href="../orderDetail.html"></a>
+			<h1 class="mui-title">修改订单</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-table-view">
+				<div class="mui-table-view-cell">
+					<span>还车时间:</span>
+					<button id='huanchetime' data-options='{}' class="right btn mui-btn mui-btn-block"></button>
+				</div>
+				<div class="mui-table-view-cell">
+					<span>还车门店:</span>
+					<button id="mendian" class="right mui-btn mui-btn-block"></button>
+					<!--<input class="right" type="button" name="" id="mendian" value="" />-->
+				</div>
+			</div>
+			<center>
+				<button type="button" style="width: 80%;height: 50px;" onclick="xiugaidingdan()" class="mui-btn mui-btn-blue mui-btn-block">修改订单</button>
+
+			</center>
+		</div>
+	</body>
+	<script>
+		(function($) {
+			$.init();
+			document.getElementById("huanchetime").addEventListener('tap', function() {
+				var optionsJson = this.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				var id = this.getAttribute('id')
+				var now = new Date();
+				var nowYear = now.getFullYear(); //年
+				var endYear = nowYear + 1;
+				
+				
+				if (document.getElementById("huanchetime").innerText.indexOf("/")>0) {
+					document.getElementById("huanchetime").innerText="";
+				}
+				
+				var picker = new $.DtPicker({
+					type: "datetime",
+					beginYear: nowYear,
+					endYear: endYear,
+					value: document.getElementById("huanchetime").innerText
+				});
+				picker.show(function(rs) {
+					document.getElementById("huanchetime").innerText = rs.text;
+					picker.dispose();
+				});
+			}, false);
+		})(mui);
+		
+		var time = document.getElementById("huanchetime");
+		var mendian = document.getElementById("mendian");
+		time.innerHTML = localStorage.getItem("detailreturnTime")
+		mendian.innerHTML = localStorage.getItem("ExpectReturnCarNetworkName");
+		mendian.addEventListener("click", function() {
+			window.localStorage.setItem("action", "xiugaidingdan");
+			clicked("../zijia/city.html", true, false);
+		})
+
+		function xiugaidingdan() {
+			var startTime =  document.getElementById("huanchetime").innerHTML
+			var now = new Date();
+			if (compareDate(startTime.replace(" ","T"),now)<0) {
+				alert("修改还车时间不能小于当前时间");
+				return;
+			}
+//			console.log(localStorage.getItem("orderId"));
+//			console.log(startTime);
+//			console.log(localStorage.getItem("ExpectReturnCarNetworkID"));
+			
+			ChangeOrderOfReturnCarInfo(localStorage.getItem("orderId"), startTime, localStorage.getItem("ExpectReturnCarNetworkID"));
+		}
+		//修改订单
+		function getdata(data, myUrl) {
+			if (data.Result == 1) {
+				if (data.Table[0].status == 0) {
+					mui.toast("修改失败");
+				} else {
+					mui.toast("修改成功");
+				}
+			}
+		}
+	</script>
+
+</html>

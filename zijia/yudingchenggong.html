@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			.days {
+				float: left;
+				text-align: center;
+				/*width: 34%;*/
+				margin-left: 10%;
+				margin-top: 20px;
+				/*background-color: blue;*/
+				width: 35px;
+				height: 35px;
+			}
+			
+			#quchemendian {
+				font-size: 13px;
+			}
+			
+			#huanchemendian {
+				font-size: 13px;
+			}
+			
+			#dingdanhao {
+				font-size: 13px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left" id="backindex"></a>
+			<h1 class="mui-title">预定成功</h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-card">
+				<ul class="mui-table-view ">
+					<li class="mui-table-view-cell">
+						订单号：<span id="dingdanhao">14643326321932</span>
+					</li>
+
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:;">
+							<img class="mui-media-object mui-pull-left" id="carPicture" src="http://placehold.it/40x30">
+							<div class="mui-media-body">
+								<span id="carname">
+								
+							</span>
+								<p id="carinfomation" class="mui-ellipsis"></p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<div style="float: left; width: 33%;text-align: center;">
+							<span style="font-size: 14px;">
+	        			取车时间
+	        	</span><br />
+							<textarea id="quchetime" style="font-size: 13px;height: 60px;padding: 4px;" readonly=""></textarea>
+							<!--<input id="quchetime" style="font-size: 13px;height: 100px;" type="text" placeholder="" value="" readonly="" />-->
+
+						</div>
+						<center class="days">
+							<span class="mui-badge mui-badge-primary" id="daysvalue"></span>
+						</center>
+						<div style="float: right; width: 33%;text-align: center;">
+							<span style="font-size: 14px; ">
+	        			还车时间
+	        		</span><br />
+							<textarea id="huanchetime" style="font-size: 13px;height: 60px;padding: 4px;" readonly=""></textarea>
+							<!--<input style="font-size: 13px;height: 100px;" id="huanchetime" type="text" name="" id="" value="" readonly="" />-->
+						</div>
+					</li>
+				</ul>
+				<form id='login-form' class="mui-input-group" style="margin: 2px;">
+					<div class="mui-input-row">
+						<label>取车门店</label>
+						<input id='quchemendian' type="text" class="mui-input-clear mui-input" value="" disabled="">
+					</div>
+					<div class="mui-input-row">
+						<label>还车门店</label>
+						<input id='huanchemendian' type="text" class="mui-input-clear mui-input" value="" disabled="">
+					</div>
+				</form>
+			</div>
+			<center>
+				预算费用:¥<span id="yusuanfeiyong" style="color: red;">
+					0.00
+				</span>
+			</center>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var cartype = JSON.parse(localStorage.getItem("carTypeStr"));
+		//		alert(localStorage.getItem("carTypeStr"))
+		document.getElementById("carPicture").src = cartype.Pictrue ? cartype.Pictrue : "../images/E30.png";
+		document.getElementById("carinfomation").innerHTML = cartype.FuelType + "|" + cartype.SkyLight + "|" + cartype.DriveMode
+		var order = JSON.parse(localStorage.getItem("order"));
+		//	   alert(localStorage.getItem("order"))
+		document.getElementById("dingdanhao").value = order.orderId;
+		document.getElementById("quchemendian").value = order.takeCarNetworkName;
+		document.getElementById("huanchemendian").value = order.returnCarNetworkName;
+		document.getElementById("carname").innerHTML = order.vehicleNo;
+		
+		document.getElementById("quchetime").value = order.takeTime;
+		document.getElementById("huanchetime").value = order.returnTime;
+		document.getElementById("dingdanhao").innerHTML = order.orderId;
+		document.getElementById("daysvalue").innerHTML = localStorage.getItem("days");
+		document.getElementById("yusuanfeiyong").innerHTML = localStorage.getItem("yudingcost");
+		document.getElementById("backindex").addEventListener("click", function() {
+			clicked("../index.html", true, false);
+		})
+	</script>
+
+</html>

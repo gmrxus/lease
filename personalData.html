@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			
+			ul,
+			ol {
+				list-style: none;
+			}
+			
+			body {
+				font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+			}
+			
+			input {
+				color: #222222;
+				font-size: 15px;
+			}
+			
+			.content {
+				margin-top: 5px;
+			}
+			
+			.content dt {
+				width: 80px;
+				display: inline-block;
+				float: left;
+				margin-left: 20px;
+				color: #666;
+				font-size: 16px;
+				margin-top: 8px;
+			}
+			
+			.content dd {
+				margin-left: 120px;
+				margin-bottom: 5px;
+			}
+			
+			.content dd input {
+				width: 85%;
+				height: 28px;
+				border: 0;
+				-webkit-border-radius: 0;
+				-webkit-appearance: none;
+			}
+			
+			.foot-ul li {
+				width: 100%;
+				text-align: center;
+				color: #666;
+			}
+			
+			.one_line {
+				display: block;
+				height: 1px;
+				border: 0;
+				border-top: 1px solid #eeeeee;
+				width: 100%;
+				margin-left: 20px;
+			}
+			
+			.am-header h1 {
+				-webkit-box-flex: 1;
+				-ms-flex: 1;
+				box-flex: 1;
+				line-height: 18px;
+				text-align: center;
+				font-size: 18px;
+				font-weight: 300;
+				color: black;
+			}
+			
+			.button {
+				width: 100%;
+				margin-top: 10px;
+				text-align: center;
+			}
+			
+			#setquestion {
+				margin-top: 45px;
+				height: 45px;
+				line-height: 45px;
+				background-color: #fff;
+			}
+			
+			#xiugaimima {
+				height: 45px;
+				line-height: 45px;
+				background-color: #fff;
+			}
+			
+			#tuichudenglu {
+				height: 45px;
+				background-color: #fff;
+				line-height: 45px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">个人资料</h1>
+		</header>
+		<div class="mui-content">
+			<dl class="content">
+				<dt>姓名
+                    ：</dt>
+				<dd>
+					<input name="WIDout_trade_cardno" id="name" readOnly="true" />
+				</dd>
+				<hr class="one_line">
+
+				<dt>证件
+                    ：</dt>
+				<dd>
+					<input name="WIDout_trade_no" id="papers" readOnly="true" />
+				</dd>
+				<hr class="one_line">
+				<dt>证件号
+                    ：</dt>
+				<dd>
+					<input name="WIDsubject" id="papersNo" readOnly="true" />
+				</dd>
+				<hr class="one_line">
+				<dt>手机号
+                    ：</dt>
+				<dd>
+					<input name="WIDtotal_fee" id="phoneNo" readOnly="true" />
+				</dd>
+				<hr class="one_line">
+
+				<dt>邮箱：</dt>
+				<dd>
+					<input name="WIDbody" id="email" readOnly="true" />
+
+				</dd>
+				<hr class="one_line">
+				<div id="setquestion" class="button">
+					设置密保问题
+				</div>
+				<div id="xiugaimima" class="button">
+					修改密码
+				</div>
+				<div id="tuichudenglu" class="button">
+					退出登录
+				</div>
+			</dl>
+
+		</div>
+		<script type="text/javascript">
+			var info = JSON.parse(localStorage.getItem('info'));
+			document.getElementById('name').value = info.LoginName;
+			document.getElementById('papers').value = "身份证/驾驶证";
+			document.getElementById('papersNo').value = info.IDCardID;
+			document.getElementById('phoneNo').value = info.Telephone;
+			document.getElementById('email').value = info.Email;
+			document.getElementById('tuichudenglu').onclick = function() {
+				localStorage.clear();
+				alert('您已退出登录')
+				window.location.href = 'index.html';
+			}
+			document.getElementById('xiugaimima').onclick = function() {
+				window.location.href = "updatePassword.html"
+			}
+			document.getElementById('setquestion').onclick = function() {
+				window.location.href = "setquestion.html";
+			}
+		</script>
+	</body>
+
+</html>

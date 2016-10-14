@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/mui.enterfocus.js"></script>
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/app.js"></script>
+		<script src="js/jquery-1.11.1.min.js" type="text/javascript" charset="UTF-8"></script>
+
+		<script src="js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+		</script>
+		<style>
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			
+			.mui-input-group label {
+				width: 22%;
+			}
+			
+			.mui-input-row label ~ input,
+			.mui-input-row label ~ select,
+			.mui-input-row label ~ textarea {
+				width: 78%;
+			}
+			
+			.mui-checkbox input[type=checkbox] .mui-radio input[type=radio] {
+				top: 6px;
+			}
+			
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			
+			.mui-btn {
+				padding: 10px;
+			}
+			
+			div {
+				font-size: 12px;
+			}
+			
+			#btnOK,
+			#btnNO {
+				width: 45%;
+			}
+			
+			option {
+				20%
+			}
+			
+			.mui-btn {
+				font-size: 16px;
+				padding: 8px;
+				margin: 3px;
+			}
+			
+			h5.mui-content-padded {
+				margin-left: 3px;
+				margin-top: 20px !important;
+			}
+			
+			h5.mui-content-padded:first-child {
+				margin-top: 12px !important;
+			}
+			
+			.ui-alert {
+				text-align: center;
+				padding: 20px 10px;
+				font-size: 16px;
+			}
+		</style>
+		<script type="text/javascript">
+		</script>
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新增地址</h1>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label class="reg-word">城市 :</label>
+					<input id='inputCity' readonly="" type="text" class="mui-input-clear mui-input" placeholder="请选择所在城市">
+
+				</div>
+				<div class="mui-input-row">
+					<label class="reg-word">姓名 :</label>
+					<input id='inputName' type="text" class="mui-input-clear mui-input" placeholder="请输入收件人姓名">
+				</div>
+				<div class="mui-input-row">
+					<label class="reg-word">手机 :</label>
+					<input id='inputTelephone' type="tel" class="mui-input-clear mui-input" placeholder="请输入手机号">
+				</div>
+
+				<div class="mui-input-row">
+					<label class="reg-word">地址 :</label>
+					<input id='inputAddress' type="text" class="mui-input-clear mui-input" placeholder="请输入详细地址">
+				</div>
+
+				<div class="mui-input-row">
+					<label class="reg-word">邮编 :</label>
+					<input id='inputPostCode' type="number" class="mui-input-clear mui-input" placeholder="请输入邮编">
+				</div>
+			</form>
+			<br />
+			<div class="mui-button-row">
+
+				<button id="btnOK" type="button" class="mui-btn mui-btn-primary" onclick="return false;">保存</button>
+			</div>
+
+		</div>
+		<script src="js/mui.min.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/mui.poppicker.js"></script>
+		<script src="js/city.data.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var address = localStorage.getItem('address');
+			var inpuAddress = document.getElementById('inputCity');
+			var loginName = JSON.parse(localStorage.getItem('info')).LoginName;
+			var name;
+			var telephone;
+			var city;
+			var address;
+			var postCode
+			window.onload = function() {
+				inpuAddress.value = address;
+			}
+			document.getElementById("inputCity").onclick = function() {
+				window.location.href = 'chooseCity.html';
+			}
+			document.getElementById("btnOK").onclick = function() {
+
+				name = document.getElementById("inputName").value;
+				telephone = document.getElementById("inputTelephone").value;
+				city = document.getElementById("inputCity").value;
+				address = document.getElementById("inputAddress").value;
+				postCode = document.getElementById("inputPostCode").value;
+
+				if (name&&telephone&&city&&address) {
+					if(!/^[\u4e00-\u9FFFA-Za-z0-9]{1,}$/.test(name)){
+						alert("请正确填写收件人姓名");
+						return;
+					}
+					if(!/^(1)[0-9]{10}$/.test(telephone)){
+						alert("请正确填写手机号码");
+						return;
+					}
+					if(!/^[\u4e00-\u9FFFA-Za-z0-9]{2,}$/.test(address)){
+						alert("请正确填写详地址");
+						return;
+					}
+					if(!/^[0-9]{6}$/.test(postCode)){
+						alert("请正确填写邮政编码");
+						return;
+					}
+					
+					
+
+					addAddress(name, telephone, city, address, postCode);
+				}else{
+					alert('请完善信息再提交');
+				}
+			}
+
+			function addAddress(name, telephone, city, address, postCode) {
+				var myUrl = HEAD + BODY_BILL + ADD_BILL_ADDRESS;
+
+				var myData = {
+					argLoginName: loginName,
+					argRecipients: name,
+					argTelephone: telephone,
+					argArea: city,
+					argDeliveryAddress: address,
+					argPostCode: postCode,
+					argUserTypeId: '2'
+				};
+				netRequest(myUrl, myData);
+			}
+
+			function getdata(data) {
+
+				if (data == 1) {
+					alert('添加成功');
+					localStorage.setItem('address','');
+					window.location.href='setBill1.html';
+				}
+			}
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+		<script type="text/javascript" src="http://lib.sinaapp.com/js/jquery/1.7.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=cqzBu53iT5l30ShFEjhhCHs099XGwXeo"></script>
+		<!--<script type="text/javascript" src="http://developer.baidu.com/map/jsdemo/demo/convertor.js"></script>-->
+		<!--<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+		<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />-->
+		<script src="../js/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/URL.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.min.js"></script>
+
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<script type="text/javascript" charset="UTF-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			
+			body,
+			html,
+			#allmap {
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				/*margin: 0;*/
+				font-family: "微软雅黑";
+			}
+			
+			
+		</style>
+		<title>地图展示</title>
+
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">附近</h1>
+			<a class="mui-icon  mui-pull-right mui-right" id="carlistBtn" onclick="carlist()">车辆列表</a>
+		</header>
+		
+
+		<div id="allmap"></div>
+
+	</body>
+	<script>
+	</script>
+	<script>
+		function carlist() {
+			//			var dataStr = JSON.stringify(dataArr);
+			//			window.localStorage.setItem('dataStr', dataStr);
+			clicked("../zijia/wangdian.html", true, false);
+		}
+	</script>
+
+	<script type="text/javascript">
+		var map = new BMap.Map("allmap");
+		var point = new BMap.Point(116.331398, 39.897445);
+		map.centerAndZoom(point, 12);
+		var geolocationControl = new BMap.GeolocationControl();
+
+		geolocationControl.addEventListener("locationSuccess", function(e) {
+			window.localStorage.setItem("currentPoint", JSON.stringify(e.point))
+			map.panTo(e.point);
+
+			//  alert(e.point);
+		});
+		geolocationControl.addEventListener("locationError", function(e) {
+			// 定位失败事件
+			alert(e.message);
+		});
+		map.addControl(geolocationControl);
+		//		var myLocation;
+		$(function() {
+			// 检测浏览器是否支持HTML5         
+			//			var map = new BMap.Map("allmap");
+			var geolocation = new BMap.Geolocation();
+			var geoc = new BMap.Geocoder();
+
+			geolocation.getCurrentPosition(function(r) {
+				if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+					geoc.getLocation(r.point, function(rs) {
+
+						//						console.log(JSON.stringify(r.point))
+						map.centerAndZoom(r.point, 12);
+						var addComp = rs.addressComponents;
+						cityName = addComp.city.substring(0, addComp.city.length - 1);
+						//创建小狐狸
+
+						//						var myIcon = new BMap.Icon("../images/position4.png", new BMap.Size(40, 40));
+						var marker2 = new BMap.Marker(r.point); // 创建标注
+						map.addOverlay(marker2); // 将标注添加到地图中
+						//						map.addOverlay(marker2);
+						GetProvinceCity("", false,localStorage.getItem("username"));
+						window.localStorage.setItem("currentPoint", JSON.stringify(r.point))
+
+						window.localStorage.setItem("qucheCity", cityName)
+						window.localStorage.setItem("huancheCity", cityName)
+					});
+				} else {
+					alert('failed' + this.getStatus());
+				}
+			}, {
+				enableHighAccuracy: true
+			})
+		})
+	</script>
+	<script type="text/javascript">
+		//		GetServiceNetworkInfo("", "", "", "", "", "", "");
+		//		GetServiceNetworkForApp(1, 20, localStorage.getItem("username"), "");
+		var dataArr = new Array;
+		var infoWindow;
+		var addressData = new Array();
+
+		function getdata(data, myUrl) {
+			//			console.log(myUrl);
+			if (myUrl == HEAD + "/lease/WsLeaseBasis.asmx/GetProvinceCity") {
+				cityArr = data.Table;
+				for (var i = 0; i < cityArr.length; i++) {
+					if (cityArr[i].name == cityName) {
+						GetNetworkInCity(localStorage.getItem("username"),cityArr[i].cityId, "", "");
+						window.localStorage.setItem("cityId", cityArr[i].cityId);
+					}
+				}
+			} else if (myUrl == HEAD + "/lease/WsLeaseBasis.asmx/GetNetworkInCity") {
+				addressData = data.Table;
+				for (var i = 0; i < data.Table.length; i++) {
+					var obj = data.Table[i];
+					//					console.log(obj.networkName)
+					var point = new BMap.Point(obj.Longitude, obj.Latitude);
+
+					var myIcon = new BMap.Icon("../images/address.png", new BMap.Size(40, 40));
+					var marker = new BMap.Marker(point, {
+						icon: myIcon
+					});
+					map.addOverlay(marker);
+					var label = new BMap.Label(data.Table[i].networkName, {
+						offset: new BMap.Size(20, 0)
+					});
+					marker.setLabel(label)
+					marker.obj = obj;
+					//					map.addOverlay(marker);
+					//					marker.obj = obj; 
+					//				在地图中添加marker
+
+					marker.addEventListener("click", function() {
+
+						//						var objStr = JSON.stringify(this.obj)
+						var content = '<div class="popView"><div id="' + this.obj.networkName + '" onclick="zijiaClick(this)" class="leftPopView"><div style="text-align: center;">' + this.obj.networkName + '</div><div style="text-align: center;">' + this.obj.Addr + '</div></div><div class="rightPopView" ><button class"daohang" id=' + this.obj.Addr + ' onclick="daohang(this)" >导航</button></div></div>';
+						infoWindow = new BMap.InfoWindow(content);
+
+						//						console.log(content);
+						this.openInfoWindow(infoWindow); //开启信息窗口
+
+					});
+
+				}
+			}
+
+		}
+
+		function zijiaClick(e) {
+			for (var i = 0; i < addressData.length; i++) {
+				if (addressData[i].networkName == e.id) {
+					window.localStorage.setItem("quchenetworkId", addressData[i].networkId);
+					window.localStorage.setItem("quchemendian", addressData[i].networkName);
+					window.localStorage.setItem("huanchenetworkId", addressData[i].networkId);
+					window.localStorage.setItem("huanchemendian", addressData[i].networkName);
+					clicked("../zijia/chooseitime.html", true, false);
+					break;
+				}
+			}
+		}
+
+		function daohang(e) {
+			//alert(e.id)
+			for (var i = 0; i < addressData.length; i++) {
+				if (addressData[i].Addr == e.id) {
+
+					var endPoint = new BMap.Point(addressData[i].Longitude, addressData[i].Latitude)
+						//					
+					window.localStorage.setItem("endPoint", JSON.stringify(endPoint));
+					clicked("../fujin/navigation.html", true, false);
+					break;
+				}
+			}
+		}
+	</script>
+	<script type="text/javascript">
+	</script>
+
+</html>

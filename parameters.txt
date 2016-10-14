@@ -1,0 +1,26 @@
+ 取车时间：startTime
+ 还车时间：endTime
+ 取车网点：quchemendian
+ 还车网点：huanchemendian
+ 取车城市：qucheCity
+ 还车城市：huancheCity
+ 取车城市networkId：quchenetworkId
+ 还车城市networkId：huanchenetworkId
+ 用户名：username
+ 密码：password
+ 个人信息：info
+ 账户余额：
+ 城市id：cityId
+ 取车或还车事件：action
+ 取、还、开、锁、退指令：zhiling
+ 车名：VehicleNo
+ 车类型：VehicleTypeName
+ 车SystemNo：SystemNo
+ 详细订单界面：{
+ 订单号：detailorderid
+ 还车时间：detailreturnTime
+ 还车门店：detailreturnStore
+ }
+ 短租或者长租：zijiatitle ：自驾短租、长租服务
+ 历史城市：historyCity
+ 

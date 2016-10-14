@@ -1,0 +1,193 @@
+<<<<<<< .mine
+{
+	"index.html": {
+		"resources": [
+			"js/common.js",
+			"js/mui.min.js",
+			"images/tslbg.jpg",
+			"js/URL.js",
+			"css/mui.min.css",
+			"wode.html",
+			"images/zijia.png",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"xuding/xuding.html"
+		],
+		"refer": [
+			"wode.html",
+			"xuding/xuding.html"
+		]
+	},
+	"tixianInput.html": {
+		"resources": [
+			"tixian.html"
+		],
+		"refer": [
+			"tixian.html"
+		]
+	},
+	"tixian.html": {
+		"resources": [
+			"tixianInput.html",
+			"yue.html"
+		],
+		"refer": [
+			"tixianInput.html",
+			"yue.html"
+		]
+	},
+	"wode.html": {
+		"resources": [
+			"fonts/mui.ttf",
+			"images/profle.png",
+			"coupon.html",
+			"orderList.html",
+			"coupon1.html",
+			"js/URL.js",
+			"index.html"
+		],
+		"refer": [
+			"coupon.html",
+			"orderList.html",
+			"coupon1.html",
+			"index.html"
+		]
+	},
+	"personalData.html": {
+		"resources": [
+			"wode.html"
+		],
+		"refer": [
+			"wode.html"
+		]
+	},
+	"coupon.html": {
+		"resources": [
+			"images/loading_throbber.png",
+			"js/mui.min.js",
+			"js/URL.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"wode.html"
+		],
+		"refer": [
+			"wode.html"
+		]
+	},
+	"orderDetail.html": {
+		"resources": [
+			"js/http.js",
+			"js/time.js",
+			"orderList.html",
+			"js/common.js"
+		],
+		"refer": [
+			"orderList.html"
+		]
+	},
+	"orderList.html": {
+		"resources": [
+			"images/loading_throbber.png",
+			"orderDetail.html",
+			"js/jquery-1.11.1.min.js",
+			"wode.html",
+			"js/mui.min.js",
+			"js/URL.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"orderDetail.html",
+			"wode.html"
+		]
+	},
+	"coupon1.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"wode.html",
+			"js/mui.pullToRefresh.js",
+			"js/mui.pullToRefresh.material.js",
+			"js/URL.js"
+		],
+		"refer": [
+			"wode.html"
+		]
+	},
+	"xuding/xuding.html": {
+		"resources": [
+			"js/websocket.js",
+			"js/mui.picker.min.js",
+			"js/mui.min.js",
+			"js/jquery-1.11.1.min.js",
+			"js/URL.js",
+			"js/http.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/time.js",
+			"css/mui.picker.min.css",
+			"index.html"
+		],
+		"refer": [
+			"index.html"
+		]
+	}
+}=======
+{
+	"index.html": {
+		"resources": [
+			"js/common.js",
+			"images/yuding.png",
+			"images/gengduo.png",
+			"js/mui.min.js",
+			"images/zijia.png",
+			"images/tslbg.jpg",
+			"js/URL.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"fonts/iconfont.ttf",
+			"images/huanche.png",
+			"images/quche.png",
+			"js/jquery-1.11.1.min.js",
+			"service.html",
+			"login.html"
+		],
+		"refer": [
+			"zijia/chooseitime.html",
+			"service.html",
+			"login.html"
+		]
+	},
+	"zijia/chooseitime.html": {
+		"resources": [
+			"images/down.png",
+			"js/mui.picker.min.js",
+			"js/http.js",
+			"fonts/mui.ttf",
+			"css/mui.picker.min.css"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"service.html": {
+		"resources": [
+			"images/help.png",
+			"index.html",
+			"fonts/mui.ttf"
+		],
+		"refer": [
+			"index.html"
+		]
+	},
+	"login.html": {
+		"resources": [
+			"fonts/mui.ttf",
+			"index.html"
+		],
+		"refer": [
+			"index.html"
+		]
+	}
+}>>>>>>> .r15736
